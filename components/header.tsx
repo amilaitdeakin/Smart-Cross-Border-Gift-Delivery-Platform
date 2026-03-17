@@ -1,34 +1,9 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 
-import {
-  ChevronDown,
-  Gift,
-  Heart,
-  LayoutDashboard,
-  LogOut,
-  MapPin,
-  Menu,
-  Package,
-  Search,
-  ShoppingCart,
-  Star,
-  User,
-  X,
-  Mail,
-  Lock,
-  Eye,
-  EyeOff,
-  Phone,
-  CheckCircle,
-  AlertCircle,
-} from "lucide-react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
-
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Dialog,
   DialogContent,
@@ -46,10 +21,32 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Separator } from "@/components/ui/separator";
 import { categories } from "@/utils/categories";
+import {
+  AlertCircle,
+  CheckCircle,
+  ChevronDown,
+  Eye,
+  EyeOff,
+  Gift,
+  Heart,
+  LayoutDashboard,
+  Lock,
+  LogOut,
+  Mail,
+  MapPin,
+  Menu,
+  Package,
+  Phone,
+  Search,
+  ShoppingCart,
+  Star,
+  User,
+  X,
+} from "lucide-react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 
 const NAV_LINKS = [
   { label: "Home", href: "/" },
@@ -881,7 +878,7 @@ const Header = () => {
       {/* LOGIN MODAL */}
       <Dialog open={loginModalOpen} onOpenChange={setLoginModalOpen}>
         <DialogContent className="sm:max-w-md w-[95vw] rounded-2xl p-0 overflow-hidden">
-          <div className="bg-gradient-to-r from-[#c8622a] to-[#b5531e] p-6 text-white">
+          <div className="bg-linear-to-r from-[#c8622a] to-[#b5531e] p-6 text-white">
             <DialogHeader className="text-center">
               <DialogTitle className="text-2xl font-serif text-white">
                 Welcome Back!
@@ -1023,7 +1020,7 @@ const Header = () => {
       {/* SIGNUP MODAL */}
       <Dialog open={signupModalOpen} onOpenChange={setSignupModalOpen}>
         <DialogContent className="sm:max-w-md w-[95vw] rounded-2xl p-0 overflow-hidden max-h-[90vh] overflow-y-auto">
-          <div className="bg-gradient-to-r from-[#c8622a] to-[#b5531e] p-6 text-white sticky top-0 z-10">
+          <div className="bg-linear-to-r from-[#c8622a] to-[#b5531e] p-6 text-white sticky top-0 z-10">
             <DialogHeader className="text-center">
               <DialogTitle className="text-2xl font-serif text-white">
                 Create Account
