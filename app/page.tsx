@@ -1,4 +1,3 @@
-import FeaturedGifts from "@/components/home/featured-gifts";
 import Hero from "@/components/home/hero-section";
 import HowItWorks from "@/components/home/how-it-works";
 import Categories from "@/components/home/popular-gift-categories";
@@ -10,7 +9,7 @@ export default function Home() {
     <main>
       <Hero />
       <Categories />
-      <FeaturedGifts />
+      {/*  <FeaturedGifts /> */}
       <HowItWorks />
       <Testimonials />
       <OccasionsBanner />

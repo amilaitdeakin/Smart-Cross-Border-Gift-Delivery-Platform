@@ -63,6 +63,7 @@ const Header = () => {
   const [loginModalOpen, setLoginModalOpen] = useState(false);
   const [signupModalOpen, setSignupModalOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<"login" | "signup">("login");
+  console.log("🚀 ~ Header ~ activeTab:", activeTab);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
