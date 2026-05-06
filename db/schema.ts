@@ -68,31 +68,72 @@ export const occasionEnum = pgEnum("occasion", [
 ]);
 
 // ============================================
-// USERS TABLE
+// USER TABLE
 // ============================================
 
-export const users = pgTable(
-  "users",
+export const user = pgTable(
+  "user",
   {
     id: uuid("id").primaryKey().defaultRandom(),
+    name: text("name").notNull(),
     email: text("email").notNull().unique(),
+    emailVerified: boolean("email_verified").notNull().default(false),
+    image: text("image"),
     phone: text("phone"),
-    passwordHash: text("password_hash").notNull(),
     firstName: text("first_name").notNull(),
     lastName: text("last_name").notNull(),
     role: userRoleEnum("role").notNull().default("customer"),
     avatarUrl: text("avatar_url"),
-    isVerified: boolean("is_verified").notNull().default(false),
     isActive: boolean("is_active").notNull().default(true),
     lastLoginAt: timestamp("last_login_at"),
     createdAt: timestamp("created_at").notNull().defaultNow(),
     updatedAt: timestamp("updated_at").notNull().defaultNow(),
   },
   (table) => [
-    uniqueIndex("users_email_idx").on(table.email),
-    index("users_role_idx").on(table.role),
+    uniqueIndex("user_email_idx").on(table.email),
+    index("user_role_idx").on(table.role),
   ],
 );
+
+export const session = pgTable("session", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  expiresAt: timestamp("expires_at").notNull(),
+  token: text("token").notNull().unique(),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+  ipAddress: text("ip_address"),
+  userAgent: text("user_agent"),
+  userId: uuid("user_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+});
+
+export const account = pgTable("account", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  accountId: text("account_id").notNull(),
+  providerId: text("provider_id").notNull(),
+  userId: uuid("user_id")
+    .notNull()
+    .references(() => user.id, { onDelete: "cascade" }),
+  accessToken: text("access_token"),
+  refreshToken: text("refresh_token"),
+  idToken: text("id_token"),
+  accessTokenExpiresAt: timestamp("access_token_expires_at"),
+  refreshTokenExpiresAt: timestamp("refresh_token_expires_at"),
+  scope: text("scope"),
+  password: text("password"),
+  createdAt: timestamp("created_at").notNull().defaultNow(),
+  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+});
+
+export const verification = pgTable("verification", {
+  id: uuid("id").primaryKey().defaultRandom(),
+  identifier: text("identifier").notNull(),
+  value: text("value").notNull(),
+  expiresAt: timestamp("expires_at").notNull(),
+  createdAt: timestamp("created_at").defaultNow(),
+  updatedAt: timestamp("updated_at").defaultNow(),
+});
 
 // ============================================
 // ADDRESSES TABLE
@@ -104,7 +145,7 @@ export const addresses = pgTable(
     id: uuid("id").primaryKey().defaultRandom(),
     userId: uuid("user_id")
       .notNull()
-      .references(() => users.id, { onDelete: "cascade" }),
+      .references(() => user.id, { onDelete: "cascade" }),
     type: text("type").notNull().default("sender"), // 'sender' or 'receiver'
     country: text("country").notNull(),
     city: text("city").notNull(),
@@ -193,10 +234,10 @@ export const orders = pgTable(
     orderNumber: text("order_number").notNull().unique(),
     senderId: uuid("sender_id")
       .notNull()
-      .references(() => users.id, { onDelete: "restrict" }),
+      .references(() => user.id, { onDelete: "restrict" }),
     receiverId: uuid("receiver_id")
       .notNull()
-      .references(() => users.id, { onDelete: "restrict" }),
+      .references(() => user.id, { onDelete: "restrict" }),
     senderAddressId: uuid("sender_address_id")
       .notNull()
       .references(() => addresses.id, { onDelete: "restrict" }),
@@ -261,7 +302,7 @@ export const deliveryPartners = pgTable(
     userId: uuid("user_id")
       .notNull()
       .unique()
-      .references(() => users.id, { onDelete: "cascade" }),
+      .references(() => user.id, { onDelete: "cascade" }),
     companyName: text("company_name"),
     vehicleType: text("vehicle_type"),
     vehicleNumber: text("vehicle_number"),
@@ -358,7 +399,7 @@ export const favorites = pgTable(
   {
     userId: uuid("user_id")
       .notNull()
-      .references(() => users.id, { onDelete: "cascade" }),
+      .references(() => user.id, { onDelete: "cascade" }),
     giftId: uuid("gift_id")
       .notNull()
       .references(() => gifts.id, { onDelete: "cascade" }),
@@ -381,7 +422,7 @@ export const cart = pgTable(
     id: uuid("id").primaryKey().defaultRandom(),
     userId: uuid("user_id")
       .notNull()
-      .references(() => users.id, { onDelete: "cascade" }),
+      .references(() => user.id, { onDelete: "cascade" }),
     giftId: uuid("gift_id")
       .notNull()
       .references(() => gifts.id, { onDelete: "cascade" }),
@@ -406,7 +447,7 @@ export const reviews = pgTable(
     id: uuid("id").primaryKey().defaultRandom(),
     userId: uuid("user_id")
       .notNull()
-      .references(() => users.id, { onDelete: "cascade" }),
+      .references(() => user.id, { onDelete: "cascade" }),
     giftId: uuid("gift_id")
       .notNull()
       .references(() => gifts.id, { onDelete: "cascade" }),
@@ -442,7 +483,7 @@ export const reviewHelpful = pgTable(
       .references(() => reviews.id, { onDelete: "cascade" }),
     userId: uuid("user_id")
       .notNull()
-      .references(() => users.id, { onDelete: "cascade" }),
+      .references(() => user.id, { onDelete: "cascade" }),
     createdAt: timestamp("created_at").notNull().defaultNow(),
   },
   (table) => [
@@ -462,7 +503,7 @@ export const notifications = pgTable(
     id: uuid("id").primaryKey().defaultRandom(),
     userId: uuid("user_id")
       .notNull()
-      .references(() => users.id, { onDelete: "cascade" }),
+      .references(() => user.id, { onDelete: "cascade" }),
     type: text("type").notNull(), // 'order_update', 'delivery', 'promo', etc.
     title: text("title").notNull(),
     message: text("message").notNull(),

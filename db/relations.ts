@@ -1,6 +1,6 @@
 import { relations } from "drizzle-orm";
 import {
-  users,
+  user,
   addresses,
   gifts,
   giftOccasions,
@@ -19,7 +19,7 @@ import {
 // USERS RELATIONS
 // ============================================
 
-export const usersRelations = relations(users, ({ many, one }) => ({
+export const userRelations = relations(user, ({ many, one }) => ({
   addresses: many(addresses),
   sentOrders: many(orders, { relationName: "sentOrders" }),
   receivedOrders: many(orders, { relationName: "receivedOrders" }),
@@ -36,9 +36,9 @@ export const usersRelations = relations(users, ({ many, one }) => ({
 // ============================================
 
 export const addressesRelations = relations(addresses, ({ one }) => ({
-  user: one(users, {
+  user: one(user, {
     fields: [addresses.userId],
-    references: [users.id],
+    references: [user.id],
   }),
 }));
 
@@ -70,14 +70,14 @@ export const giftOccasionsRelations = relations(giftOccasions, ({ one }) => ({
 // ============================================
 
 export const ordersRelations = relations(orders, ({ one, many }) => ({
-  sender: one(users, {
+  sender: one(user, {
     fields: [orders.senderId],
-    references: [users.id],
+    references: [user.id],
     relationName: "sentOrders",
   }),
-  receiver: one(users, {
+  receiver: one(user, {
     fields: [orders.receiverId],
-    references: [users.id],
+    references: [user.id],
     relationName: "receivedOrders",
   }),
   senderAddress: one(addresses, {
@@ -104,9 +104,9 @@ export const ordersRelations = relations(orders, ({ one, many }) => ({
 export const deliveryPartnersRelations = relations(
   deliveryPartners,
   ({ one, many }) => ({
-    user: one(users, {
+    user: one(user, {
       fields: [deliveryPartners.userId],
-      references: [users.id],
+      references: [user.id],
     }),
     deliveries: many(deliveries),
   }),
@@ -143,9 +143,9 @@ export const paymentsRelations = relations(payments, ({ one }) => ({
 // ============================================
 
 export const favoritesRelations = relations(favorites, ({ one }) => ({
-  user: one(users, {
+  user: one(user, {
     fields: [favorites.userId],
-    references: [users.id],
+    references: [user.id],
   }),
   gift: one(gifts, {
     fields: [favorites.giftId],
@@ -158,9 +158,9 @@ export const favoritesRelations = relations(favorites, ({ one }) => ({
 // ============================================
 
 export const cartRelations = relations(cart, ({ one }) => ({
-  user: one(users, {
+  user: one(user, {
     fields: [cart.userId],
-    references: [users.id],
+    references: [user.id],
   }),
   gift: one(gifts, {
     fields: [cart.giftId],
@@ -173,9 +173,9 @@ export const cartRelations = relations(cart, ({ one }) => ({
 // ============================================
 
 export const reviewsRelations = relations(reviews, ({ one, many }) => ({
-  user: one(users, {
+  user: one(user, {
     fields: [reviews.userId],
-    references: [users.id],
+    references: [user.id],
   }),
   gift: one(gifts, {
     fields: [reviews.giftId],
@@ -197,9 +197,9 @@ export const reviewHelpfulRelations = relations(reviewHelpful, ({ one }) => ({
     fields: [reviewHelpful.reviewId],
     references: [reviews.id],
   }),
-  user: one(users, {
+  user: one(user, {
     fields: [reviewHelpful.userId],
-    references: [users.id],
+    references: [user.id],
   }),
 }));
 
@@ -208,8 +208,8 @@ export const reviewHelpfulRelations = relations(reviewHelpful, ({ one }) => ({
 // ============================================
 
 export const notificationsRelations = relations(notifications, ({ one }) => ({
-  user: one(users, {
+  user: one(user, {
     fields: [notifications.userId],
-    references: [users.id],
+    references: [user.id],
   }),
 }));
