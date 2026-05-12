@@ -31,6 +31,7 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { LoginModal } from "./model/login-modal";
 import { SignupModal } from "./model/signup-model";
+import { authClient } from "@/lib/auth-client";
 
 const NAV_LINKS = [
   { label: "Home", href: "/" },
@@ -48,7 +49,9 @@ const Header = () => {
   const [signupModalOpen, setSignupModalOpen] = useState(false);
 
   const pathname = usePathname();
-  const isLoggedIn = false; // Replace with real auth state
+  const { data: session } = authClient.useSession();
+  console.log("🚀 ~ Header ~ session:", session);
+  const isLoggedIn = !!session;
 
   // Mock cart count - replace with real cart context
   useEffect(() => {
@@ -492,7 +495,12 @@ const Header = () => {
                         </DropdownMenuItem>
                       ))}
                       <DropdownMenuSeparator />
-                      <DropdownMenuItem className="flex items-center gap-2 text-red-500 cursor-pointer">
+                      <DropdownMenuItem
+                        className="flex items-center gap-2 text-red-500 cursor-pointer"
+                        onClick={async () => {
+                          await authClient.signOut();
+                        }}
+                      >
                         <LogOut className="h-4 w-4" /> Logout
                       </DropdownMenuItem>
                     </DropdownMenuContent>
@@ -681,24 +689,39 @@ const Header = () => {
             </div>
 
             <div className="flex gap-2 mb-5">
-              <button
-                className="lta-btn-login w-full"
-                onClick={() => {
-                  setMobileOpen(false);
-                  openLoginModal();
-                }}
-              >
-                Login
-              </button>
-              <button
-                className="lta-btn-signup w-full"
-                onClick={() => {
-                  setMobileOpen(false);
-                  openSignupModal();
-                }}
-              >
-                Sign Up
-              </button>
+              {!isLoggedIn ? (
+                <>
+                  <button
+                    className="lta-btn-login w-full"
+                    onClick={() => {
+                      setMobileOpen(false);
+                      openLoginModal();
+                    }}
+                  >
+                    Login
+                  </button>
+                  <button
+                    className="lta-btn-signup w-full"
+                    onClick={() => {
+                      setMobileOpen(false);
+                      openSignupModal();
+                    }}
+                  >
+                    Sign Up
+                  </button>
+                </>
+              ) : (
+                <button
+                  className="lta-btn-login w-full flex items-center justify-center gap-2"
+                  style={{ borderColor: "#ef4444", color: "#ef4444" }}
+                  onClick={async () => {
+                    setMobileOpen(false);
+                    await authClient.signOut();
+                  }}
+                >
+                  <LogOut className="h-4 w-4" /> Logout
+                </button>
+              )}
             </div>
 
             <div className="lta-divider" />
