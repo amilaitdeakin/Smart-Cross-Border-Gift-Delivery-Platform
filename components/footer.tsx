@@ -4,6 +4,7 @@ import { Facebook, Gift, Instagram, Twitter, Youtube } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import Image from "next/image";
 
 const Footer = () => {
   return (
@@ -13,8 +14,13 @@ const Footer = () => {
           {/* Company Info */}
           <div>
             <div className="flex items-center gap-2 mb-4">
-              <Gift className="h-8 w-8 text-primary" />
-              <h3 className="text-xl font-bold">LankaToAus</h3>
+              <Image
+                src="/assets/imasge.jpeg"
+                alt="Logo"
+                width={200}
+                height={200}
+                className="lta-logo-font"
+              />
             </div>
             <p className="text-muted-foreground text-sm mb-4">
               Bridging hearts between Sri Lanka and Australia with love and

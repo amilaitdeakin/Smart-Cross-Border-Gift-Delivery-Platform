@@ -32,6 +32,7 @@ import { useEffect, useState } from "react";
 import { LoginModal } from "./model/login-modal";
 import { SignupModal } from "./model/signup-model";
 import { authClient } from "@/lib/auth-client";
+import Image from "next/image";
 
 const NAV_LINKS = [
   { label: "Home", href: "/" },
@@ -343,22 +344,17 @@ const Header = () => {
                 className="flex items-center gap-3 shrink-0 group"
                 aria-label="Home"
               >
-                <div className="w-10 h-10 rounded-xl bg-linear-to-br from-amber-500 to-orange-700 flex items-center justify-center shadow-md group-hover:shadow-lg transition-shadow">
+                {/* <div className="w-10 h-10 rounded-xl bg-linear-to-br from-amber-500 to-orange-700 flex items-center justify-center shadow-md group-hover:shadow-lg transition-shadow">
                   <Gift className="h-5 w-5 text-white" />
-                </div>
+                </div> */}
                 <div>
-                  <h1
-                    className="lta-logo-font text-xl leading-tight"
-                    style={{ color: "#1a0a00" }}
-                  >
-                    Lanka<span style={{ color: "#c8622a" }}>To</span>Aus
-                  </h1>
-                  <p
-                    className="text-xs"
-                    style={{ color: "#b8977a", letterSpacing: "0.03em" }}
-                  >
-                    Send Love Across Borders
-                  </p>
+                  <Image
+                    src="/assets/imasge.jpeg"
+                    alt="Logo"
+                    width={200}
+                    height={200}
+                    className="lta-logo-font"
+                  />
                 </div>
               </Link>
 
