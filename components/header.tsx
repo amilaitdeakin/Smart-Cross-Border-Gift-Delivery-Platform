@@ -570,7 +570,7 @@ const Header = () => {
         </div>
 
         {/* Route strip */}
-        <div
+        {/*        <div
           className="lta-route-strip"
           aria-label="Delivery route information"
         >
@@ -595,7 +595,7 @@ const Header = () => {
               </span>
             ))}
           </div>
-        </div>
+        </div> */}
       </header>
 
       {/* Mobile Search Overlay */}

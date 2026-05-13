@@ -566,7 +566,7 @@ const productsData = [
     category: "Chocolate",
     badge: "Handmade",
     image:
-      "https://images.unsplash.com/photo-1549007953-9b53f6b6f90a?q=80&w=1200&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1548741487-18d363dc4469?q=80&w=1740&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     description: "Crafted premium chocolate selection with elegant flavors.",
     price: 45,
     oldPrice: 60,
@@ -646,7 +646,7 @@ const productsData = [
     category: "Plants",
     badge: "Eco Friendly",
     image:
-      "https://images.unsplash.com/photo-1593697971681-d2ce9af13bfb?q=80&w=1200&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1616690248297-1ec539dd910f?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8SW5kb29yJTIwUGxhbnQlMjAtJTIwUGVhY2UlMjBMaWx5fGVufDB8fDB8fHww",
     description: "Low-maintenance peace lily that purifies air and brings joy.",
     price: 32,
     oldPrice: 45,
@@ -659,7 +659,7 @@ const productsData = [
     category: "Chocolate",
     badge: "Gourmet",
     image:
-      "https://images.unsplash.com/photo-1587315288902-0be61e3e6c3e?q=80&w=1200&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1623284060556-37e5ff559dd3?q=80&w=1740&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     description: "Fresh strawberries dipped in premium Belgian chocolate.",
     price: 38,
     oldPrice: 52,
@@ -698,7 +698,7 @@ const productsData = [
     category: "Flowers",
     badge: "Romantic",
     image:
-      "https://images.unsplash.com/photo-1582819506926-005d9524e886?q=80&w=1200&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1679678109868-cb5bd66d61dc?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     description: "Stunning mix of red roses and white lilies.",
     price: 48,
     oldPrice: 65,
