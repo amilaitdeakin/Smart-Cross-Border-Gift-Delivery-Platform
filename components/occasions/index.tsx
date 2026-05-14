@@ -23,7 +23,7 @@ export default function ShopByOccasionPage() {
           <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-[#6f5a4d]">
             Find thoughtful gifts for birthdays, anniversaries, graduations,
             festive celebrations and every meaningful moment between Sri Lanka
-            and Australia.
+            and Worldwide.
           </p>
         </div>
       </section>
@@ -118,7 +118,7 @@ export default function ShopByOccasionPage() {
 
             <p className="mx-auto mt-6 max-w-2xl text-lg text-orange-100">
               Send handcrafted chocolates and luxury sweet gifts to loved ones
-              across Australia.
+              across Worldwide.
             </p>
 
             <Button
@@ -209,6 +209,6 @@ const features = [
   {
     icon: Truck,
     title: "Fast Delivery",
-    description: "Reliable delivery across major Australian cities.",
+    description: "Reliable delivery across major Worldwiden cities.",
   },
 ];

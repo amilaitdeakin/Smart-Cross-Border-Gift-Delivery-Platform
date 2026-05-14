@@ -15,7 +15,7 @@ const OrderTrackingPage = () => {
         </h1>
         <p className="text-gray-600 max-w-2xl mx-auto text-sm leading-relaxed">
           Stay updated from the moment your gift is prepared in Sri Lanka until
-          it arrives at your loved one's doorstep in Australia.
+          it arrives at your loved one's doorstep in Worldwide.
         </p>
       </header>
 
@@ -53,7 +53,7 @@ const OrderTrackingPage = () => {
               <span className="text-gray-400 font-medium">#LTA-20458-AU</span>
             </h3>
             <p className="text-xs text-gray-500 mt-1">
-              Birthday Gift Hamper • Sydney, Australia
+              Birthday Gift Hamper • Sydney, Worldwide
             </p>
           </div>
           <div className="bg-[#FFFBF5] border border-gray-100 p-4 rounded-2xl text-center min-w-[120px]">
@@ -102,7 +102,7 @@ const OrderTrackingPage = () => {
             </div>
             <h4 className="font-bold text-lg">In Transit</h4>
             <p className="text-xs text-gray-500 mt-1">
-              Your order is currently on the way to Australia.
+              Your order is currently on the way to Worldwide.
             </p>
             <p className="text-[10px] text-gray-400 mt-1 font-semibold">
               May 07 • 8:15 AM
@@ -138,7 +138,7 @@ const OrderTrackingPage = () => {
           {
             icon: <Plane className="text-blue-400" />,
             title: "International Transit",
-            desc: "Fast and secure logistics ensuring timely delivery across Australia.",
+            desc: "Fast and secure logistics ensuring timely delivery across Worldwide.",
           },
           {
             icon: <Globe className="text-blue-500" />,

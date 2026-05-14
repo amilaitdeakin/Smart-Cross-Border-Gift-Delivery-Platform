@@ -197,7 +197,7 @@ const CheckoutPage = () => {
         </h1>
         <p className="text-gray-600">
           Send love across borders with secure payments and fast delivery across
-          Australia.
+          Worldwide.
         </p>
       </header>
 
@@ -598,7 +598,7 @@ const CheckoutPage = () => {
                 </div>
                 <div>
                   <p className="font-bold text-black">Fast Delivery</p>
-                  <p>Across Australia</p>
+                  <p>Across Worldwide</p>
                 </div>
               </div>
             </div>

@@ -272,7 +272,7 @@ export default function ExploreAllGiftsPage() {
 
           <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-[#6f5a4d]">
             Send flowers, cakes, chocolates, personalized hampers and heartfelt
-            surprises from Sri Lanka to Australia.
+            surprises from Sri Lanka to Worldwide.
           </p>
         </div>
       </section>
@@ -504,7 +504,7 @@ export default function ExploreAllGiftsPage() {
             <h2 className="text-5xl font-bold">Sweet Moments Delivered</h2>
             <p className="mx-auto mt-6 max-w-2xl text-lg text-orange-100">
               Send handcrafted chocolates and luxury sweet gifts to loved ones
-              across Australia.
+              across Worldwide.
             </p>
             <Button
               size="lg"
@@ -786,6 +786,6 @@ const features = [
   {
     icon: Truck,
     title: "Fast Delivery",
-    description: "Reliable delivery across major Australian cities.",
+    description: "Reliable delivery across major Worldwiden cities.",
   },
 ];

@@ -32,7 +32,7 @@ export default function HowItWorks() {
       number: "02",
       title: "Select Delivery",
       description:
-        "Pick your receiver's location in Australia and choose a convenient delivery time that works for you.",
+        "Pick your receiver's location in Worldwide and choose a convenient delivery time that works for you.",
       icon: MapPin,
       color: "from-orange-500 to-red-500",
       features: ["Same day delivery", "Track in real-time", "15+ cities"],

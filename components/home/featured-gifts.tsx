@@ -151,7 +151,7 @@ export default function FeaturedGifts() {
       name: "Chocolate Fudge Cake",
       description: "1kg Rich Chocolate Cake with Nuts",
       longDescription:
-        "Indulge in the ultimate chocolate experience with our rich and moist chocolate fudge cake. Made with premium cocoa and topped with crushed nuts, this 1kg cake is perfect for any celebration. Available for same-day delivery across Australia.",
+        "Indulge in the ultimate chocolate experience with our rich and moist chocolate fudge cake. Made with premium cocoa and topped with crushed nuts, this 1kg cake is perfect for any celebration. Available for same-day delivery across Worldwide.",
       price: 49,
       originalPrice: 59,
       rating: 5.0,

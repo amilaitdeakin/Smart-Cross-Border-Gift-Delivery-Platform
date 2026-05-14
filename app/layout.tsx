@@ -20,9 +20,9 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "LankaToAus - Cross Border Gift Delivery",
   description:
-    "Send gifts from Sri Lanka to Australia. Flowers, cakes, chocolates and custom gifts delivered with love across borders.",
+    "Send gifts from Sri Lanka to Worldwide. Flowers, cakes, chocolates and custom gifts delivered with love across borders.",
   keywords:
-    "gift delivery sri lanka, send gifts to australia, cross border delivery, sri lankan gifts, flowers delivery australia",
+    "gift delivery sri lanka, send gifts to Worldwide, cross border delivery, sri lankan gifts, flowers delivery Worldwide",
 };
 
 // Navigation menu items for mega menu
