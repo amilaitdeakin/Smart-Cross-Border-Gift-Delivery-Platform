@@ -85,7 +85,7 @@ export default function Testimonials() {
       comment:
         "The cake was delicious and arrived in perfect condition. Only giving 4 stars because delivery was 15 mins late, but the quality made up for it.",
       fullComment:
-        "The cake was delicious and arrived in perfect condition. Only giving 4 stars because delivery was 15 mins late, but the quality made up for it. The chocolate fudge cake was rich and moist - my brother said it was the best cake he's had in Australia. Would order again for sure!",
+        "The cake was delicious and arrived in perfect condition. Only giving 4 stars because delivery was 15 mins late, but the quality made up for it. The chocolate fudge cake was rich and moist - my brother said it was the best cake he's had in Worldwide. Would order again for sure!",
       helpful: 9,
       image: "🍰",
     },

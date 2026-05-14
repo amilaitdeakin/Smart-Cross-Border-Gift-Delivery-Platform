@@ -313,7 +313,7 @@ const Header = () => {
         <div className="lta-topbar">
           <div className="container mx-auto px-4 py-2 flex items-center justify-between">
             <span>
-              🇦🇺 Fast delivery across Australia · 🇱🇰 Sourced from Sri Lanka
+              🇦🇺 Fast delivery across Worldwide · 🇱🇰 Sourced from Sri Lanka
             </span>
             <div className="flex items-center gap-4">
               <a
@@ -577,13 +577,13 @@ const Header = () => {
           <span className="lta-route-arrow" aria-hidden="true">
             →
           </span>
-          <span style={{ fontWeight: 500 }}>Australia</span>
+          <span style={{ fontWeight: 500 }}>Worldwide</span>
           <span className="lta-flag" aria-hidden="true">
             🇦🇺
           </span>
           <div
             className="flex gap-2 ml-2"
-            aria-label="Available cities in Australia"
+            aria-label="Available cities in Worldwide"
           >
             {["Sydney", "Melbourne", "Brisbane", "Perth"].map((city) => (
               <span key={city} className="lta-route-city">

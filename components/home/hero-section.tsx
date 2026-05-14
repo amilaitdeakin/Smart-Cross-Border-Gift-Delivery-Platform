@@ -48,7 +48,7 @@ export default function Hero() {
               <br />
               To{" "}
               <span className="bg-linear-to-r from-[#c8622a] to-amber-500 bg-clip-text text-transparent">
-                Australia
+                Worldwide
               </span>
             </h1>
 
@@ -74,7 +74,7 @@ export default function Hero() {
               </div>
               <div>
                 <div className="text-3xl font-bold text-[#1a0a00]">15</div>
-                <div className="text-sm text-gray-500">Cities in Australia</div>
+                <div className="text-sm text-gray-500">Cities in Worldwide</div>
               </div>
             </div>
 

@@ -23,7 +23,7 @@ const Footer = () => {
               />
             </div>
             <p className="text-muted-foreground text-sm mb-4">
-              Bridging hearts between Sri Lanka and Australia with love and
+              Bridging hearts between Sri Lanka and Worldwide with love and
               gifts.
             </p>
             <div className="flex gap-2">
@@ -161,7 +161,7 @@ const Footer = () => {
         <div className="border-t mt-8 pt-8 text-center text-muted-foreground text-sm">
           <p>
             © 2026 LankaToAus. All rights reserved. | Sending love from Sri
-            Lanka to Australia ❤️
+            Lanka to Worldwide ❤️
           </p>
         </div>
       </div>

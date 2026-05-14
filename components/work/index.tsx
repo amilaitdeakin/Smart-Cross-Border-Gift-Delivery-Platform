@@ -35,7 +35,7 @@ export default function HowItWorksPage() {
           </h1>
 
           <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-[#6f5a4d]">
-            Sending gifts from Sri Lanka to Australia has never been easier.
+            Sending gifts from Sri Lanka to Worldwide has never been easier.
             From choosing the perfect surprise to doorstep delivery, we handle
             everything with care.
           </p>
@@ -80,7 +80,7 @@ export default function HowItWorksPage() {
               </p>
 
               <h2 className="mt-4 text-4xl font-bold">
-                From Sri Lanka to Australia
+                From Sri Lanka to Worldwide
               </h2>
             </div>
 
@@ -214,7 +214,7 @@ export default function HowItWorksPage() {
 
             <p className="mx-auto mt-6 max-w-2xl text-lg text-orange-100">
               Start browsing beautiful gifts curated for every celebration and
-              every loved one across Australia.
+              every loved one across Worldwide.
             </p>
 
             <Button
@@ -253,7 +253,7 @@ const steps = [
     icon: Truck,
     title: "Delivered with Love",
     description:
-      "Your gift is beautifully prepared and delivered across Australia on time.",
+      "Your gift is beautifully prepared and delivered across Worldwide on time.",
   },
 ];
 
@@ -270,7 +270,7 @@ const flow = [
   },
   {
     icon: Globe,
-    title: "Australia",
+    title: "Worldwide",
     description: "Delivered to your loved ones",
   },
 ];
@@ -279,7 +279,7 @@ const features = [
   {
     icon: Truck,
     title: "Fast Delivery",
-    description: "Reliable and timely delivery across major Australian cities.",
+    description: "Reliable and timely delivery across major Worldwiden cities.",
   },
   {
     icon: Gift,
@@ -299,7 +299,7 @@ const faqs = [
   {
     question: "How long does delivery take?",
     answer:
-      "Most deliveries are completed within 1–3 business days depending on the location in Australia.",
+      "Most deliveries are completed within 1–3 business days depending on the location in Worldwide.",
   },
   {
     question: "Can I schedule a future delivery?",
