@@ -124,7 +124,7 @@ export const SignupModal = ({
               Create Account
             </DialogTitle>
             <DialogDescription className="text-orange-100">
-              Join LankaToAus to start sending gifts
+              Join WorldWish to start sending gifts
             </DialogDescription>
           </DialogHeader>
         </div>

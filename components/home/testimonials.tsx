@@ -32,9 +32,9 @@ export default function Testimonials() {
       verified: true,
       purchase: "Birthday Bliss Combo",
       comment:
-        "My sister was so surprised! The cake was fresh and the flowers beautiful. The delivery person even helped set up a small surprise. Thank you LankaToAus for making her birthday special!",
+        "My sister was so surprised! The cake was fresh and the flowers beautiful. The delivery person even helped set up a small surprise. Thank you WorldWish for making her birthday special!",
       fullComment:
-        "My sister was so surprised! The cake was fresh and the flowers beautiful. The delivery person even helped set up a small surprise with candles and everything. She cried happy tears! The tracking feature was spot on and I knew exactly when it would arrive. Thank you LankaToAus for making her birthday so special from so far away!",
+        "My sister was so surprised! The cake was fresh and the flowers beautiful. The delivery person even helped set up a small surprise with candles and everything. She cried happy tears! The tracking feature was spot on and I knew exactly when it would arrive. Thank you WorldWish for making her birthday so special from so far away!",
       helpful: 24,
       image: "🎂",
     },

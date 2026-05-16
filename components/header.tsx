@@ -672,7 +672,7 @@ const Header = () => {
                   className="lta-logo-font font-semibold"
                   style={{ color: "#1a0a00" }}
                 >
-                  LankaToAus
+                  WorldWish
                 </span>
               </div>
               <button
