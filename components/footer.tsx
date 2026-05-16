@@ -160,8 +160,8 @@ const Footer = () => {
         {/* Bottom Bar */}
         <div className="border-t mt-8 pt-8 text-center text-muted-foreground text-sm">
           <p>
-            © 2026 LankaToAus. All rights reserved. | Sending love from Sri
-            Lanka to Worldwide ❤️
+            © 2026 WorldWish. All rights reserved. | Sending love from Sri Lanka
+            to Worldwide ❤️
           </p>
         </div>
       </div>

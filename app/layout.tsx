@@ -18,7 +18,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "LankaToAus - Cross Border Gift Delivery",
+  title: "WorldWish - Cross Border Gift Delivery",
   description:
     "Send gifts from Sri Lanka to Worldwide. Flowers, cakes, chocolates and custom gifts delivered with love across borders.",
   keywords:
