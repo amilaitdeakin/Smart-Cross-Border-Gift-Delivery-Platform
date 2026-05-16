@@ -349,7 +349,7 @@ const Header = () => {
                 </div> */}
                 <div>
                   <Image
-                    src="/assets/imasge.jpeg"
+                    src="/assets/imasge.png"
                     alt="Logo"
                     width={200}
                     height={200}
