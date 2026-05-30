@@ -1,22 +1,66 @@
-// app/checkout/page.tsx
 "use client";
 
-import React, { useState } from "react";
+import {
+  Check,
+  CreditCard,
+  Lock,
+  ShoppingCart,
+  Sparkles,
+  Truck,
+} from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import {
-  CreditCard,
-  Truck,
-  Lock,
-  Sparkles,
-  ShoppingCart,
-  ChevronRight,
-  Check,
-  AlertCircle,
-} from "lucide-react";
+import React, { useState } from "react";
+import { useForm, Controller } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 
 import { useCartStore } from "@/store/cartStore";
+
+// Form validation schema
+const checkoutSchema = z
+  .object({
+    // Delivery Information
+    firstName: z.string().min(1, "First name is required"),
+    lastName: z.string().min(1, "Last name is required"),
+    address: z.string().min(1, "Address is required"),
+    apartment: z.string().optional(),
+    city: z.string().min(1, "City is required"),
+    postalCode: z.string().min(1, "Postal code is required"),
+    phone: z.string().min(1, "Phone number is required"),
+    deliveryDate: z.string().min(1, "Delivery date is required"),
+    deliveryInstruction: z.string().optional(),
+
+    // Gift Message
+    giftMessage: z.string().optional(),
+    messageTitle: z.string().optional(),
+
+    // Payment
+    paymentMethod: z.enum(["card", "paypal"]),
+
+    // Card details (conditional)
+    cardNumber: z.string().optional(),
+    cardholderName: z.string().optional(),
+    expiryDate: z.string().optional(),
+    cvv: z.string().optional(),
+  })
+  .refine(
+    (data) => {
+      if (data.paymentMethod === "card") {
+        return (
+          data.cardNumber && data.cardholderName && data.expiryDate && data.cvv
+        );
+      }
+      return true;
+    },
+    {
+      message: "Card details are required for card payment",
+      path: ["cardNumber"],
+    },
+  );
+
+type CheckoutFormData = z.infer<typeof checkoutSchema>;
 
 const CheckoutPage = () => {
   const router = useRouter();
@@ -27,26 +71,39 @@ const CheckoutPage = () => {
   const [orderNumber, setOrderNumber] = useState("");
   const [showAiMessage, setShowAiMessage] = useState(false);
 
-  // Form state
-  const [formData, setFormData] = useState({
-    // Delivery Information
-    firstName: "",
-    lastName: "",
-    address: "",
-    apartment: "",
-    city: "",
-    postalCode: "",
-    phone: "",
-    deliveryDate: "",
-    deliveryInstruction: "",
-
-    // Gift Message
-    giftMessage: "",
-    messageTitle: "",
-
-    // Payment
-    paymentMethod: "card",
+  const {
+    register,
+    control,
+    handleSubmit,
+    watch,
+    setValue,
+    formState: { errors, isValid },
+  } = useForm<CheckoutFormData>({
+    resolver: zodResolver(checkoutSchema),
+    defaultValues: {
+      firstName: "",
+      lastName: "",
+      address: "",
+      apartment: "",
+      city: "",
+      postalCode: "",
+      phone: "",
+      deliveryDate: "",
+      deliveryInstruction: "",
+      giftMessage: "",
+      messageTitle: "",
+      paymentMethod: "card",
+      cardNumber: "",
+      cardholderName: "",
+      expiryDate: "",
+      cvv: "",
+    },
+    mode: "onChange",
   });
+
+  const paymentMethod = watch("paymentMethod");
+  const giftMessage = watch("giftMessage");
+  const deliveryDate = watch("deliveryDate");
 
   const subtotal = getTotalPrice();
   const cartItemCount = getTotalItems();
@@ -68,35 +125,12 @@ const CheckoutPage = () => {
 
   const generateAIMessage = () => {
     const randomIndex = Math.floor(Math.random() * aiMessages.length);
-    setFormData((prev) => ({ ...prev, giftMessage: aiMessages[randomIndex] }));
+    setValue("giftMessage", aiMessages[randomIndex], { shouldValidate: true });
     setShowAiMessage(true);
     setTimeout(() => setShowAiMessage(false), 3000);
   };
 
-  const handleInputChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
-  ) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({ ...prev, [name]: value }));
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    // Validate required fields
-    if (
-      !formData.firstName ||
-      !formData.lastName ||
-      !formData.address ||
-      !formData.city ||
-      !formData.postalCode ||
-      !formData.phone ||
-      !formData.deliveryDate
-    ) {
-      alert("Please fill in all required fields");
-      return;
-    }
-
+  const onSubmit = async (data: CheckoutFormData) => {
     setIsProcessing(true);
 
     // Simulate API call
@@ -203,7 +237,10 @@ const CheckoutPage = () => {
 
       <main className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8">
         {/* Left Column: Forms */}
-        <form onSubmit={handleSubmit} className="lg:col-span-2 space-y-6">
+        <form
+          onSubmit={handleSubmit(onSubmit)}
+          className="lg:col-span-2 space-y-6"
+        >
           {/* Delivery Information Section */}
           <section className="bg-white rounded-3xl p-6 md:p-8 border border-gray-100 shadow-sm">
             <div className="flex items-center gap-4 mb-6">
@@ -225,12 +262,17 @@ const CheckoutPage = () => {
                 </label>
                 <input
                   type="text"
-                  name="firstName"
+                  {...register("firstName")}
                   placeholder="John"
-                  value={formData.firstName}
-                  onChange={handleInputChange}
-                  className="w-full p-3 rounded-xl border border-gray-200 bg-orange-50/30 focus:outline-none focus:ring-2 focus:ring-orange-200"
+                  className={`w-full p-3 rounded-xl border ${
+                    errors.firstName ? "border-red-500" : "border-gray-200"
+                  } bg-orange-50/30 focus:outline-none focus:ring-2 focus:ring-orange-200`}
                 />
+                {errors.firstName && (
+                  <p className="text-red-500 text-xs">
+                    {errors.firstName.message}
+                  </p>
+                )}
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-semibold">
@@ -238,12 +280,17 @@ const CheckoutPage = () => {
                 </label>
                 <input
                   type="text"
-                  name="lastName"
+                  {...register("lastName")}
                   placeholder="Doe"
-                  value={formData.lastName}
-                  onChange={handleInputChange}
-                  className="w-full p-3 rounded-xl border border-gray-200 bg-orange-50/30 focus:outline-none focus:ring-2 focus:ring-orange-200"
+                  className={`w-full p-3 rounded-xl border ${
+                    errors.lastName ? "border-red-500" : "border-gray-200"
+                  } bg-orange-50/30 focus:outline-none focus:ring-2 focus:ring-orange-200`}
                 />
+                {errors.lastName && (
+                  <p className="text-red-500 text-xs">
+                    {errors.lastName.message}
+                  </p>
+                )}
               </div>
               <div className="md:col-span-2 space-y-2">
                 <label className="text-sm font-semibold">
@@ -251,12 +298,17 @@ const CheckoutPage = () => {
                 </label>
                 <input
                   type="text"
-                  name="address"
+                  {...register("address")}
                   placeholder="Street address"
-                  value={formData.address}
-                  onChange={handleInputChange}
-                  className="w-full p-3 rounded-xl border border-gray-200 bg-orange-50/30 focus:outline-none focus:ring-2 focus:ring-orange-200"
+                  className={`w-full p-3 rounded-xl border ${
+                    errors.address ? "border-red-500" : "border-gray-200"
+                  } bg-orange-50/30 focus:outline-none focus:ring-2 focus:ring-orange-200`}
                 />
+                {errors.address && (
+                  <p className="text-red-500 text-xs">
+                    {errors.address.message}
+                  </p>
+                )}
               </div>
               <div className="md:col-span-2 space-y-2">
                 <label className="text-sm font-semibold">
@@ -264,10 +316,8 @@ const CheckoutPage = () => {
                 </label>
                 <input
                   type="text"
-                  name="apartment"
+                  {...register("apartment")}
                   placeholder="Apt 4B"
-                  value={formData.apartment}
-                  onChange={handleInputChange}
                   className="w-full p-3 rounded-xl border border-gray-200 bg-orange-50/30 focus:outline-none focus:ring-2 focus:ring-orange-200"
                 />
               </div>
@@ -277,12 +327,15 @@ const CheckoutPage = () => {
                 </label>
                 <input
                   type="text"
-                  name="city"
+                  {...register("city")}
                   placeholder="Sydney"
-                  value={formData.city}
-                  onChange={handleInputChange}
-                  className="w-full p-3 rounded-xl border border-gray-200 bg-orange-50/30 focus:outline-none focus:ring-2 focus:ring-orange-200"
+                  className={`w-full p-3 rounded-xl border ${
+                    errors.city ? "border-red-500" : "border-gray-200"
+                  } bg-orange-50/30 focus:outline-none focus:ring-2 focus:ring-orange-200`}
                 />
+                {errors.city && (
+                  <p className="text-red-500 text-xs">{errors.city.message}</p>
+                )}
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-semibold">
@@ -290,12 +343,17 @@ const CheckoutPage = () => {
                 </label>
                 <input
                   type="text"
-                  name="postalCode"
+                  {...register("postalCode")}
                   placeholder="2000"
-                  value={formData.postalCode}
-                  onChange={handleInputChange}
-                  className="w-full p-3 rounded-xl border border-gray-200 bg-orange-50/30 focus:outline-none focus:ring-2 focus:ring-orange-200"
+                  className={`w-full p-3 rounded-xl border ${
+                    errors.postalCode ? "border-red-500" : "border-gray-200"
+                  } bg-orange-50/30 focus:outline-none focus:ring-2 focus:ring-orange-200`}
                 />
+                {errors.postalCode && (
+                  <p className="text-red-500 text-xs">
+                    {errors.postalCode.message}
+                  </p>
+                )}
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-semibold">
@@ -303,12 +361,15 @@ const CheckoutPage = () => {
                 </label>
                 <input
                   type="tel"
-                  name="phone"
+                  {...register("phone")}
                   placeholder="+61 4XX XXX XXX"
-                  value={formData.phone}
-                  onChange={handleInputChange}
-                  className="w-full p-3 rounded-xl border border-gray-200 bg-orange-50/30 focus:outline-none focus:ring-2 focus:ring-orange-200"
+                  className={`w-full p-3 rounded-xl border ${
+                    errors.phone ? "border-red-500" : "border-gray-200"
+                  } bg-orange-50/30 focus:outline-none focus:ring-2 focus:ring-orange-200`}
                 />
+                {errors.phone && (
+                  <p className="text-red-500 text-xs">{errors.phone.message}</p>
+                )}
               </div>
               <div className="space-y-2">
                 <label className="text-sm font-semibold">
@@ -316,11 +377,16 @@ const CheckoutPage = () => {
                 </label>
                 <input
                   type="date"
-                  name="deliveryDate"
-                  value={formData.deliveryDate}
-                  onChange={handleInputChange}
-                  className="w-full p-3 rounded-xl border border-gray-200 bg-orange-50/30 focus:outline-none focus:ring-2 focus:ring-orange-200"
+                  {...register("deliveryDate")}
+                  className={`w-full p-3 rounded-xl border ${
+                    errors.deliveryDate ? "border-red-500" : "border-gray-200"
+                  } bg-orange-50/30 focus:outline-none focus:ring-2 focus:ring-orange-200`}
                 />
+                {errors.deliveryDate && (
+                  <p className="text-red-500 text-xs">
+                    {errors.deliveryDate.message}
+                  </p>
+                )}
               </div>
               <div className="md:col-span-2 space-y-2">
                 <label className="text-sm font-semibold">
@@ -328,10 +394,8 @@ const CheckoutPage = () => {
                 </label>
                 <input
                   type="text"
-                  name="deliveryInstruction"
+                  {...register("deliveryInstruction")}
                   placeholder="Leave at front door, call upon arrival, etc."
-                  value={formData.deliveryInstruction}
-                  onChange={handleInputChange}
                   className="w-full p-3 rounded-xl border border-gray-200 bg-orange-50/30 focus:outline-none focus:ring-2 focus:ring-orange-200"
                 />
               </div>
@@ -352,10 +416,8 @@ const CheckoutPage = () => {
               </div>
             </div>
             <textarea
-              name="giftMessage"
+              {...register("giftMessage")}
               rows={4}
-              value={formData.giftMessage}
-              onChange={handleInputChange}
               placeholder="Write your personalized message here..."
               className="w-full p-4 rounded-2xl border border-gray-200 bg-orange-50/30 mb-4 resize-none focus:outline-none focus:ring-2 focus:ring-orange-200"
             />
@@ -367,10 +429,8 @@ const CheckoutPage = () => {
             <div className="flex flex-col sm:flex-row gap-2">
               <input
                 type="text"
-                name="messageTitle"
+                {...register("messageTitle")}
                 placeholder="Example: Birthday message for wife"
-                value={formData.messageTitle}
-                onChange={handleInputChange}
                 className="flex-1 p-3 rounded-xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-orange-200"
               />
               <button
@@ -398,73 +458,85 @@ const CheckoutPage = () => {
             </div>
 
             <div className="space-y-3">
-              <div
-                className={`flex items-center justify-between p-4 border-2 rounded-2xl transition cursor-pointer ${
-                  formData.paymentMethod === "card"
-                    ? "border-orange-500 bg-orange-50/20"
-                    : "border-gray-200"
-                }`}
-                onClick={() =>
-                  setFormData((prev) => ({ ...prev, paymentMethod: "card" }))
-                }
-              >
-                <div className="flex items-center gap-3">
-                  <input
-                    type="radio"
-                    name="paymentMethod"
-                    checked={formData.paymentMethod === "card"}
-                    onChange={() => {}}
-                    className="w-4 h-4 accent-orange-600"
-                  />
-                  <div>
-                    <p className="font-bold">Credit / Debit Card</p>
-                    <p className="text-xs text-gray-500">
-                      Visa, Mastercard, American Express
-                    </p>
-                  </div>
-                </div>
-                <CreditCard size={20} className="text-gray-400" />
-              </div>
+              <Controller
+                name="paymentMethod"
+                control={control}
+                render={({ field }) => (
+                  <>
+                    <div
+                      className={`flex items-center justify-between p-4 border-2 rounded-2xl transition cursor-pointer ${
+                        field.value === "card"
+                          ? "border-orange-500 bg-orange-50/20"
+                          : "border-gray-200"
+                      }`}
+                      onClick={() => field.onChange("card")}
+                    >
+                      <div className="flex items-center gap-3">
+                        <input
+                          type="radio"
+                          checked={field.value === "card"}
+                          onChange={() => {}}
+                          className="w-4 h-4 accent-orange-600"
+                        />
+                        <div>
+                          <p className="font-bold">Credit / Debit Card</p>
+                          <p className="text-xs text-gray-500">
+                            Visa, Mastercard, American Express
+                          </p>
+                        </div>
+                      </div>
+                      <CreditCard size={20} className="text-gray-400" />
+                    </div>
 
-              <div
-                className={`flex items-center justify-between p-4 border-2 rounded-2xl transition cursor-pointer ${
-                  formData.paymentMethod === "paypal"
-                    ? "border-orange-500 bg-orange-50/20"
-                    : "border-gray-200"
-                }`}
-                onClick={() =>
-                  setFormData((prev) => ({ ...prev, paymentMethod: "paypal" }))
-                }
-              >
-                <div className="flex items-center gap-3">
-                  <input
-                    type="radio"
-                    name="paymentMethod"
-                    checked={formData.paymentMethod === "paypal"}
-                    onChange={() => {}}
-                    className="w-4 h-4"
-                  />
-                  <div>
-                    <p className="font-bold">PayPal</p>
-                    <p className="text-xs text-gray-500">
-                      Fast and secure online payment
-                    </p>
-                  </div>
-                </div>
-                <span className="text-blue-600 font-bold italic">PayPal</span>
-              </div>
+                    <div
+                      className={`flex items-center justify-between p-4 border-2 rounded-2xl transition cursor-pointer ${
+                        field.value === "paypal"
+                          ? "border-orange-500 bg-orange-50/20"
+                          : "border-gray-200"
+                      }`}
+                      onClick={() => field.onChange("paypal")}
+                    >
+                      <div className="flex items-center gap-3">
+                        <input
+                          type="radio"
+                          checked={field.value === "paypal"}
+                          onChange={() => {}}
+                          className="w-4 h-4"
+                        />
+                        <div>
+                          <p className="font-bold">PayPal</p>
+                          <p className="text-xs text-gray-500">
+                            Fast and secure online payment
+                          </p>
+                        </div>
+                      </div>
+                      <span className="text-blue-600 font-bold italic">
+                        PayPal
+                      </span>
+                    </div>
+                  </>
+                )}
+              />
             </div>
 
-            {formData.paymentMethod === "card" && (
+            {paymentMethod === "card" && (
               <div className="mt-4 animate-in fade-in slide-in-from-top-2 space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <label className="text-sm font-semibold">Card Number</label>
                     <input
                       type="text"
+                      {...register("cardNumber")}
                       placeholder="1234 5678 9012 3456"
-                      className="w-full p-3 rounded-xl border border-gray-200 bg-gray-50"
+                      className={`w-full p-3 rounded-xl border ${
+                        errors.cardNumber ? "border-red-500" : "border-gray-200"
+                      } bg-gray-50`}
                     />
+                    {errors.cardNumber && (
+                      <p className="text-red-500 text-xs">
+                        {errors.cardNumber.message}
+                      </p>
+                    )}
                   </div>
                   <div className="space-y-2">
                     <label className="text-sm font-semibold">
@@ -472,25 +544,51 @@ const CheckoutPage = () => {
                     </label>
                     <input
                       type="text"
+                      {...register("cardholderName")}
                       placeholder="John Doe"
-                      className="w-full p-3 rounded-xl border border-gray-200 bg-gray-50"
+                      className={`w-full p-3 rounded-xl border ${
+                        errors.cardholderName
+                          ? "border-red-500"
+                          : "border-gray-200"
+                      } bg-gray-50`}
                     />
+                    {errors.cardholderName && (
+                      <p className="text-red-500 text-xs">
+                        {errors.cardholderName.message}
+                      </p>
+                    )}
                   </div>
                   <div className="space-y-2">
                     <label className="text-sm font-semibold">Expiry Date</label>
                     <input
                       type="text"
+                      {...register("expiryDate")}
                       placeholder="MM/YY"
-                      className="w-full p-3 rounded-xl border border-gray-200 bg-gray-50"
+                      className={`w-full p-3 rounded-xl border ${
+                        errors.expiryDate ? "border-red-500" : "border-gray-200"
+                      } bg-gray-50`}
                     />
+                    {errors.expiryDate && (
+                      <p className="text-red-500 text-xs">
+                        {errors.expiryDate.message}
+                      </p>
+                    )}
                   </div>
                   <div className="space-y-2">
                     <label className="text-sm font-semibold">CVV</label>
                     <input
                       type="password"
+                      {...register("cvv")}
                       placeholder="123"
-                      className="w-full p-3 rounded-xl border border-gray-200 bg-gray-50"
+                      className={`w-full p-3 rounded-xl border ${
+                        errors.cvv ? "border-red-500" : "border-gray-200"
+                      } bg-gray-50`}
                     />
+                    {errors.cvv && (
+                      <p className="text-red-500 text-xs">
+                        {errors.cvv.message}
+                      </p>
+                    )}
                   </div>
                 </div>
               </div>
@@ -562,8 +660,9 @@ const CheckoutPage = () => {
             </div>
 
             <button
-              onClick={handleSubmit}
-              disabled={isProcessing}
+              type="submit"
+              onClick={handleSubmit(onSubmit)}
+              disabled={isProcessing || !isValid}
               className="w-full bg-[#D36B31] text-white py-4 rounded-2xl font-bold text-lg hover:bg-[#b85a28] transition shadow-lg mb-3 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isProcessing ? (
@@ -604,11 +703,11 @@ const CheckoutPage = () => {
             </div>
 
             {/* Delivery Estimate Preview */}
-            {formData.deliveryDate && (
+            {deliveryDate && (
               <div className="mt-4 p-3 bg-orange-50 rounded-xl">
                 <p className="text-xs text-gray-500">Estimated Delivery</p>
                 <p className="text-sm font-semibold text-[#D36B31]">
-                  {new Date(formData.deliveryDate).toLocaleDateString("en-US", {
+                  {new Date(deliveryDate).toLocaleDateString("en-US", {
                     weekday: "long",
                     month: "long",
                     day: "numeric",
@@ -618,12 +717,12 @@ const CheckoutPage = () => {
             )}
 
             {/* Gift Message Preview */}
-            {formData.giftMessage && (
+            {giftMessage && (
               <div className="mt-4 p-3 bg-red-50 rounded-xl">
                 <p className="text-xs text-gray-500 mb-1">
                   Gift Message Preview
                 </p>
-                <p className="text-sm italic">"{formData.giftMessage}"</p>
+                <p className="text-sm italic">"{giftMessage}"</p>
               </div>
             )}
           </div>
