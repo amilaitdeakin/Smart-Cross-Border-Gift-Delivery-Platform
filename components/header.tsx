@@ -33,6 +33,7 @@ import { LoginModal } from "./model/login-modal";
 import { SignupModal } from "./model/signup-model";
 import { authClient } from "@/lib/auth-client";
 import Image from "next/image";
+import { useCartStore } from "@/store/cartStore";
 
 const NAV_LINKS = [
   { label: "Home", href: "/" },
@@ -43,15 +44,17 @@ const NAV_LINKS = [
 ];
 
 const Header = () => {
+  const { getTotalItems } = useCartStore();
+
   const [searchOpen, setSearchOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [cartCount, setCartCount] = useState(0);
   const [loginModalOpen, setLoginModalOpen] = useState(false);
   const [signupModalOpen, setSignupModalOpen] = useState(false);
 
+  const cartItemCount = getTotalItems();
   const pathname = usePathname();
   const { data: session } = authClient.useSession();
-  console.log("🚀 ~ Header ~ session:", session);
   const isLoggedIn = !!session;
 
   // Mock cart count - replace with real cart context
@@ -400,12 +403,12 @@ const Header = () => {
                   aria-label="Shopping cart"
                 >
                   <ShoppingCart className="h-5 w-5" />
-                  {cartCount > 0 && (
+                  {cartItemCount > 0 && (
                     <span
                       className="lta-cart-badge"
-                      aria-label={`${cartCount} items in cart`}
+                      aria-label={`${cartItemCount} items in cart`}
                     >
-                      {cartCount}
+                      {cartItemCount}
                     </span>
                   )}
                 </Link>

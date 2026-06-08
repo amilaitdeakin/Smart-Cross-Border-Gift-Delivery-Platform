@@ -13,6 +13,7 @@ import {
   reviews,
   reviewHelpful,
   notifications,
+  orderItems,
 } from "./schema";
 
 // ============================================
@@ -21,8 +22,7 @@ import {
 
 export const userRelations = relations(user, ({ many, one }) => ({
   addresses: many(addresses),
-  sentOrders: many(orders, { relationName: "sentOrders" }),
-  receivedOrders: many(orders, { relationName: "receivedOrders" }),
+  sentOrders: many(orders),
   deliveryPartner: one(deliveryPartners),
   favorites: many(favorites),
   cartItems: many(cart),
@@ -48,7 +48,7 @@ export const addressesRelations = relations(addresses, ({ one }) => ({
 
 export const giftsRelations = relations(gifts, ({ many }) => ({
   occasions: many(giftOccasions),
-  orders: many(orders),
+  orders: many(orderItems),
   favorites: many(favorites),
   cartItems: many(cart),
   reviews: many(reviews),
@@ -70,28 +70,15 @@ export const giftOccasionsRelations = relations(giftOccasions, ({ one }) => ({
 // ============================================
 
 export const ordersRelations = relations(orders, ({ one, many }) => ({
-  sender: one(user, {
-    fields: [orders.senderId],
+  user: one(user, {
+    fields: [orders.userId],
     references: [user.id],
-    relationName: "sentOrders",
   }),
-  receiver: one(user, {
-    fields: [orders.receiverId],
-    references: [user.id],
-    relationName: "receivedOrders",
-  }),
-  senderAddress: one(addresses, {
-    fields: [orders.senderAddressId],
+  deliveryAddress: one(addresses, {
+    fields: [orders.deliveryAddressId],
     references: [addresses.id],
   }),
-  receiverAddress: one(addresses, {
-    fields: [orders.receiverAddressId],
-    references: [addresses.id],
-  }),
-  gift: one(gifts, {
-    fields: [orders.giftId],
-    references: [gifts.id],
-  }),
+  items: many(orderItems),
   delivery: one(deliveries),
   payments: many(payments),
   reviews: many(reviews),
@@ -211,5 +198,20 @@ export const notificationsRelations = relations(notifications, ({ one }) => ({
   user: one(user, {
     fields: [notifications.userId],
     references: [user.id],
+  }),
+}));
+
+// ============================================
+// ORDER ITEMS RELATIONS
+// ============================================
+
+export const orderItemsRelations = relations(orderItems, ({ one }) => ({
+  order: one(orders, {
+    fields: [orderItems.orderId],
+    references: [orders.id],
+  }),
+  gift: one(gifts, {
+    fields: [orderItems.giftId],
+    references: [gifts.id],
   }),
 }));

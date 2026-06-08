@@ -144,7 +144,6 @@ export const addresses = pgTable(
   {
     id: uuid("id").primaryKey().defaultRandom(),
     userId: uuid("user_id")
-      .notNull()
       .references(() => user.id, { onDelete: "cascade" }),
     type: text("type").notNull().default("sender"), // 'sender' or 'receiver'
     country: text("country").notNull(),
@@ -232,22 +231,15 @@ export const orders = pgTable(
   {
     id: uuid("id").primaryKey().defaultRandom(),
     orderNumber: text("order_number").notNull().unique(),
-    senderId: uuid("sender_id")
-      .notNull()
-      .references(() => user.id, { onDelete: "restrict" }),
-    receiverId: uuid("receiver_id")
-      .notNull()
-      .references(() => user.id, { onDelete: "restrict" }),
-    senderAddressId: uuid("sender_address_id")
-      .notNull()
+    userId: uuid("user_id")
+      .references(() => user.id, { onDelete: "set null" }),
+    senderName: text("sender_name").notNull(),
+    senderEmail: text("sender_email").notNull(),
+    senderPhone: text("sender_phone").notNull(),
+    receiverName: text("receiver_name").notNull(),
+    receiverPhone: text("receiver_phone").notNull(),
+    deliveryAddressId: uuid("delivery_address_id")
       .references(() => addresses.id, { onDelete: "restrict" }),
-    receiverAddressId: uuid("receiver_address_id")
-      .notNull()
-      .references(() => addresses.id, { onDelete: "restrict" }),
-    giftId: uuid("gift_id")
-      .notNull()
-      .references(() => gifts.id, { onDelete: "restrict" }),
-    quantity: integer("quantity").notNull().default(1),
     giftMessage: text("gift_message"),
     isSurprise: boolean("is_surprise").notNull().default(false),
     surpriseRevealMessage: text("surprise_reveal_message"),
@@ -283,11 +275,32 @@ export const orders = pgTable(
   },
   (table) => [
     index("orders_order_number_idx").on(table.orderNumber),
-    index("orders_sender_id_idx").on(table.senderId),
-    index("orders_receiver_id_idx").on(table.receiverId),
+    index("orders_user_id_idx").on(table.userId),
     index("orders_status_idx").on(table.status),
     index("orders_delivery_date_idx").on(table.deliveryDate),
     index("orders_tracking_code_idx").on(table.trackingCode),
+  ],
+);
+
+// ============================================
+// ORDER ITEMS TABLE
+// ============================================
+
+export const orderItems = pgTable(
+  "order_items",
+  {
+    id: uuid("id").primaryKey().defaultRandom(),
+    orderId: uuid("order_id")
+      .notNull()
+      .references(() => orders.id, { onDelete: "cascade" }),
+    giftId: text("gift_id").notNull(),
+    quantity: integer("quantity").notNull().default(1),
+    priceLkr: decimal("price_lkr", { precision: 10, scale: 2 }).notNull(),
+    priceAud: decimal("price_aud", { precision: 10, scale: 2 }).notNull(),
+  },
+  (table) => [
+    index("order_items_order_id_idx").on(table.orderId),
+    index("order_items_gift_id_idx").on(table.giftId),
   ],
 );
 
