@@ -15,10 +15,10 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
-
 import { useCartStore } from "@/store/cartStore";
 import { useTRPC } from "@/trpc/client";
 import { useMutation } from "@tanstack/react-query";
+import { authClient } from "@/lib/auth-client";
 
 // Form validation schema
 const checkoutSchema = z
@@ -46,6 +46,7 @@ const checkoutSchema = z
     cardholderName: z.string().optional(),
     expiryDate: z.string().optional(),
     cvv: z.string().optional(),
+    userId: z.string().optional(),
   })
   .refine(
     (data) => {
@@ -68,7 +69,10 @@ const CheckoutPage = () => {
   const router = useRouter();
   const { products, getTotalItems, getTotalPrice, clearCart } = useCartStore();
   const trpc = useTRPC();
-  const createOrderMutation = useMutation(trpc.order.createOrder.mutationOptions());
+  const createOrderMutation = useMutation(
+    trpc.order.createOrder.mutationOptions(),
+  );
+  const { data: session } = authClient.useSession();
 
   const [isProcessing, setIsProcessing] = useState(false);
   const [orderComplete, setOrderComplete] = useState(false);
@@ -101,6 +105,7 @@ const CheckoutPage = () => {
       cardholderName: "",
       expiryDate: "",
       cvv: "",
+      userId: session?.user.id,
     },
     mode: "onChange",
   });
@@ -135,6 +140,11 @@ const CheckoutPage = () => {
   };
 
   const onSubmit = async (data: CheckoutFormData) => {
+    if (!session) {
+      alert("Please login to checkout");
+      return;
+    }
+
     setIsProcessing(true);
 
     try {
@@ -152,11 +162,12 @@ const CheckoutPage = () => {
         deliveryInstruction: data.deliveryInstruction,
         giftMessage: data.giftMessage,
         paymentMethod: data.paymentMethod,
-        items: products.map(p => ({
+        items: products.map((p) => ({
           giftId: p.id.toString(),
           quantity: p.quantity || 1,
-          priceAud: p.price || 0
-        }))
+          priceAud: p.price || 0,
+        })),
+        userId: session?.user.id || "",
       });
 
       if (response.success) {
