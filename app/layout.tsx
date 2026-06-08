@@ -4,6 +4,7 @@ import { cn } from "@/lib/utils";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Inter } from "next/font/google";
 import "./globals.css";
+import { TRPCReactProvider } from "@/trpc/client";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-sans" });
 
@@ -37,14 +38,11 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex flex-col`}
       >
-        {/* Main Header */}
-        <Header />
-
-        {/* Main Content */}
-        <main className="grow">{children}</main>
-
-        {/* Footer */}
-        <Footer />
+        <TRPCReactProvider>
+          <Header />
+          <main className="grow">{children}</main>
+          <Footer />
+        </TRPCReactProvider>
       </body>
     </html>
   );

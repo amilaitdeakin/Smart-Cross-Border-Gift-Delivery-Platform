@@ -1,5 +1,6 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
 import {
   Check,
   CreditCard,
@@ -11,12 +12,13 @@ import {
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
-import { useForm, Controller } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
+import { useState } from "react";
+import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { useCartStore } from "@/store/cartStore";
+import { useTRPC } from "@/trpc/client";
+import { useMutation } from "@tanstack/react-query";
 
 // Form validation schema
 const checkoutSchema = z
@@ -65,6 +67,8 @@ type CheckoutFormData = z.infer<typeof checkoutSchema>;
 const CheckoutPage = () => {
   const router = useRouter();
   const { products, getTotalItems, getTotalPrice, clearCart } = useCartStore();
+  const trpc = useTRPC();
+  const createOrderMutation = useMutation(trpc.order.createOrder.mutationOptions());
 
   const [isProcessing, setIsProcessing] = useState(false);
   const [orderComplete, setOrderComplete] = useState(false);
@@ -133,15 +137,38 @@ const CheckoutPage = () => {
   const onSubmit = async (data: CheckoutFormData) => {
     setIsProcessing(true);
 
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    try {
+      const response = await createOrderMutation.mutateAsync({
+        senderName: "Guest",
+        senderEmail: "",
+        senderPhone: "",
+        receiverName: `${data.firstName} ${data.lastName}`,
+        receiverPhone: data.phone,
+        deliveryAddress: data.address,
+        deliveryApartment: data.apartment,
+        deliveryCity: data.city,
+        deliveryPostalCode: data.postalCode,
+        deliveryDate: data.deliveryDate,
+        deliveryInstruction: data.deliveryInstruction,
+        giftMessage: data.giftMessage,
+        paymentMethod: data.paymentMethod,
+        items: products.map(p => ({
+          giftId: p.id.toString(),
+          quantity: p.quantity || 1,
+          priceAud: p.price || 0
+        }))
+      });
 
-    // Generate order number
-    const newOrderNumber = `GIFT-${Math.floor(Math.random() * 1000000)}`;
-    setOrderNumber(newOrderNumber);
-    setOrderComplete(true);
-    clearCart();
-    setIsProcessing(false);
+      if (response.success) {
+        setOrderNumber(response.orderNumber);
+        setOrderComplete(true);
+        clearCart();
+      }
+    } catch (error) {
+      console.error("Order creation failed:", error);
+    } finally {
+      setIsProcessing(false);
+    }
   };
 
   if (products.length === 0 && !orderComplete) {
