@@ -1,0 +1,220 @@
+﻿
+> my-app@0.1.0 build
+> next build
+
+node.exe : ΓÜá `images.domains` is deprecated in favor of `images.remotePatterns`. Please update next.config.ts to 
+protect your application from malicious users.
+At C:\Program Files\nodejs\npm.ps1:29 char:3
++   & $NODE_EXE $NPM_CLI_JS $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (ΓÜá `images.dom...alicious users.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+Γû▓ Next.js 16.1.6 (Turbopack)
+
+  Creating an optimized production build ...
+
+> Build error occurred
+Error: Turbopack build failed with 6 errors:
+./app/admin/orders/[id]/page.tsx:6:1
+Export trpc doesn't exist in target module
+[0m [90m 4 |[39m [36mimport[39m [33mLink[39m [36mfrom[39m [32m"next/link"[39m[33m;[39m
+ [90m 5 |[39m [36mimport[39m { useRouter[33m,[39m useParams } [36mfrom[39m 
+[32m"next/navigation"[39m[33m;[39m
+[31m[1m>[22m[39m[90m 6 |[39m [36mimport[39m { trpc } [36mfrom[39m [32m"@/trpc/client"[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[3
+1m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[
+31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39
+m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[3
+9m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 7 |[39m [36mimport[39m { toast } [36mfrom[39m [32m"sonner"[39m[33m;[39m
+ [90m 8 |[39m [36mimport[39m { [33mLoadingSpinner[39m } [36mfrom[39m 
+[32m"@/components/ui/loading-spinner"[39m[33m;[39m
+ [90m 9 |[39m [36mimport[39m { [33mBadge[39m } [36mfrom[39m [32m"@/components/ui/badge"[39m[33m;[39m[0m
+
+The export trpc was not found in module [project]/trpc/client.tsx [app-client] (ecmascript).
+Did you mean to import TRPCProvider?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the 
+requested export doesn't exist.
+
+Import traces:
+  Client Component Browser:
+    ./app/admin/orders/[id]/page.tsx [Client Component Browser]
+    ./app/admin/orders/[id]/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/admin/orders/[id]/page.tsx [Client Component SSR]
+    ./app/admin/orders/[id]/page.tsx [Server Component]
+
+
+./app/admin/orders/[id]/page.tsx:6:1
+Export trpc doesn't exist in target module
+[0m [90m 4 |[39m [36mimport[39m [33mLink[39m [36mfrom[39m [32m"next/link"[39m[33m;[39m
+ [90m 5 |[39m [36mimport[39m { useRouter[33m,[39m useParams } [36mfrom[39m 
+[32m"next/navigation"[39m[33m;[39m
+[31m[1m>[22m[39m[90m 6 |[39m [36mimport[39m { trpc } [36mfrom[39m [32m"@/trpc/client"[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[3
+1m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[
+31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39
+m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[3
+9m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 7 |[39m [36mimport[39m { toast } [36mfrom[39m [32m"sonner"[39m[33m;[39m
+ [90m 8 |[39m [36mimport[39m { [33mLoadingSpinner[39m } [36mfrom[39m 
+[32m"@/components/ui/loading-spinner"[39m[33m;[39m
+ [90m 9 |[39m [36mimport[39m { [33mBadge[39m } [36mfrom[39m [32m"@/components/ui/badge"[39m[33m;[39m[0m
+
+The export trpc was not found in module [project]/trpc/client.tsx [app-ssr] (ecmascript).
+Did you mean to import TRPCProvider?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the 
+requested export doesn't exist.
+
+Import traces:
+  Client Component Browser:
+    ./app/admin/orders/[id]/page.tsx [Client Component Browser]
+    ./app/admin/orders/[id]/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/admin/orders/[id]/page.tsx [Client Component SSR]
+    ./app/admin/orders/[id]/page.tsx [Server Component]
+
+
+./app/admin/orders/page.tsx:6:1
+Export trpc doesn't exist in target module
+[0m [90m 4 |[39m [36mimport[39m [33mLink[39m [36mfrom[39m [32m"next/link"[39m[33m;[39m
+ [90m 5 |[39m [36mimport[39m { useRouter[33m,[39m useSearchParams } [36mfrom[39m 
+[32m"next/navigation"[39m[33m;[39m
+[31m[1m>[22m[39m[90m 6 |[39m [36mimport[39m { trpc } [36mfrom[39m [32m"@/trpc/client"[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[3
+1m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[
+31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39
+m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[3
+9m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 7 |[39m [36mimport[39m { [33mLoadingSpinner[39m } [36mfrom[39m 
+[32m"@/components/ui/loading-spinner"[39m[33m;[39m
+ [90m 8 |[39m [36mimport[39m { [33mBadge[39m } [36mfrom[39m [32m"@/components/ui/badge"[39m[33m;[39m
+ [90m 9 |[39m [36mimport[39m { [33mButton[39m } [36mfrom[39m [32m"@/components/ui/button"[39m[33m;[39m[0m
+
+The export trpc was not found in module [project]/trpc/client.tsx [app-client] (ecmascript).
+Did you mean to import TRPCProvider?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the 
+requested export doesn't exist.
+
+Import traces:
+  Client Component Browser:
+    ./app/admin/orders/page.tsx [Client Component Browser]
+    ./app/admin/orders/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/admin/orders/page.tsx [Client Component SSR]
+    ./app/admin/orders/page.tsx [Server Component]
+
+
+./app/admin/orders/page.tsx:6:1
+Export trpc doesn't exist in target module
+[0m [90m 4 |[39m [36mimport[39m [33mLink[39m [36mfrom[39m [32m"next/link"[39m[33m;[39m
+ [90m 5 |[39m [36mimport[39m { useRouter[33m,[39m useSearchParams } [36mfrom[39m 
+[32m"next/navigation"[39m[33m;[39m
+[31m[1m>[22m[39m[90m 6 |[39m [36mimport[39m { trpc } [36mfrom[39m [32m"@/trpc/client"[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[3
+1m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[
+31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39
+m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[3
+9m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 7 |[39m [36mimport[39m { [33mLoadingSpinner[39m } [36mfrom[39m 
+[32m"@/components/ui/loading-spinner"[39m[33m;[39m
+ [90m 8 |[39m [36mimport[39m { [33mBadge[39m } [36mfrom[39m [32m"@/components/ui/badge"[39m[33m;[39m
+ [90m 9 |[39m [36mimport[39m { [33mButton[39m } [36mfrom[39m [32m"@/components/ui/button"[39m[33m;[39m[0m
+
+The export trpc was not found in module [project]/trpc/client.tsx [app-ssr] (ecmascript).
+Did you mean to import TRPCProvider?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the 
+requested export doesn't exist.
+
+Import traces:
+  Client Component Browser:
+    ./app/admin/orders/page.tsx [Client Component Browser]
+    ./app/admin/orders/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/admin/orders/page.tsx [Client Component SSR]
+    ./app/admin/orders/page.tsx [Server Component]
+
+
+./app/admin/page.tsx:5:1
+Export trpc doesn't exist in target module
+[0m [90m 3 |[39m [36mimport[39m [33mReact[39m [36mfrom[39m [32m"react"[39m[33m;[39m
+ [90m 4 |[39m [36mimport[39m [33mLink[39m [36mfrom[39m [32m"next/link"[39m[33m;[39m
+[31m[1m>[22m[39m[90m 5 |[39m [36mimport[39m { trpc } [36mfrom[39m [32m"@/trpc/client"[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[3
+1m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[
+31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39
+m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[3
+9m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 6 |[39m [36mimport[39m { [33mLoadingSpinner[39m } [36mfrom[39m 
+[32m"@/components/ui/loading-spinner"[39m[33m;[39m
+ [90m 7 |[39m [36mimport[39m {
+ [90m 8 |[39m   [33mBarChart[39m[33m,[39m[0m
+
+The export trpc was not found in module [project]/trpc/client.tsx [app-client] (ecmascript).
+Did you mean to import TRPCProvider?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the 
+requested export doesn't exist.
+
+Import traces:
+  Client Component Browser:
+    ./app/admin/page.tsx [Client Component Browser]
+    ./app/admin/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/admin/page.tsx [Client Component SSR]
+    ./app/admin/page.tsx [Server Component]
+
+
+./app/admin/page.tsx:5:1
+Export trpc doesn't exist in target module
+[0m [90m 3 |[39m [36mimport[39m [33mReact[39m [36mfrom[39m [32m"react"[39m[33m;[39m
+ [90m 4 |[39m [36mimport[39m [33mLink[39m [36mfrom[39m [32m"next/link"[39m[33m;[39m
+[31m[1m>[22m[39m[90m 5 |[39m [36mimport[39m { trpc } [36mfrom[39m [32m"@/trpc/client"[39m[33m;[39m
+ [90m   |[39m [31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[3
+1m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[
+31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m
+[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39
+m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[39m[31m[1m^[22m[3
+9m[31m[1m^[22m[39m[31m[1m^[22m[39m
+ [90m 6 |[39m [36mimport[39m { [33mLoadingSpinner[39m } [36mfrom[39m 
+[32m"@/components/ui/loading-spinner"[39m[33m;[39m
+ [90m 7 |[39m [36mimport[39m {
+ [90m 8 |[39m   [33mBarChart[39m[33m,[39m[0m
+
+The export trpc was not found in module [project]/trpc/client.tsx [app-ssr] (ecmascript).
+Did you mean to import TRPCProvider?
+All exports of the module are statically known (It doesn't have dynamic exports). So it's known statically that the 
+requested export doesn't exist.
+
+Import traces:
+  Client Component Browser:
+    ./app/admin/page.tsx [Client Component Browser]
+    ./app/admin/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./app/admin/page.tsx [Client Component SSR]
+    ./app/admin/page.tsx [Server Component]
+
+
+    at <unknown> (./app/admin/orders/[id]/page.tsx:6:1)
+    at <unknown> (./app/admin/orders/[id]/page.tsx:6:1)
+    at <unknown> (./app/admin/orders/page.tsx:6:1)
+    at <unknown> (./app/admin/orders/page.tsx:6:1)
+    at <unknown> (./app/admin/page.tsx:5:1)
+    at <unknown> (./app/admin/page.tsx:5:1)

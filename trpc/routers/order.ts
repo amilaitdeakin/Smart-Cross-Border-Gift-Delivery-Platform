@@ -1,12 +1,157 @@
 import { z } from "zod";
 import { createTRPCRouter, baseProcedure } from "../init";
 import { db } from "@/db";
-import { orders, orderItems, addresses, gifts } from "@/db/schema";
+import { orders, orderItems, addresses, gifts, deliveries } from "@/db/schema";
 import { eq, or, inArray } from "drizzle-orm";
 
 
 
 export const orderRouter = createTRPCRouter({
+  // Admin: Get all orders with filtering
+  getAllOrders: baseProcedure
+    .input(
+      z.object({
+        status: z.enum(["pending", "processing", "out_for_delivery", "delivered", "cancelled", "refunded"]).optional(),
+        paymentStatus: z.enum(["pending", "completed", "failed", "refunded"]).optional(),
+        limit: z.number().min(1).max(100).default(50),
+        offset: z.number().min(0).default(0),
+        search: z.string().optional(),
+      })
+    )
+    .query(async ({ input }) => {
+      const { status, paymentStatus, limit, offset, search } = input;
+      
+      const allOrders = await db.query.orders.findMany({
+        limit: 1000,
+        orderBy: (orders, { desc }) => desc(orders.createdAt),
+        with: {
+          items: true,
+          user: true,
+        }
+      });
+
+      let filteredOrders = allOrders;
+
+      if (status) {
+        filteredOrders = filteredOrders.filter(o => o.status === status);
+      }
+
+      if (paymentStatus) {
+        filteredOrders = filteredOrders.filter(o => o.paymentStatus === paymentStatus);
+      }
+
+      if (search) {
+        const searchLower = search.toLowerCase();
+        filteredOrders = filteredOrders.filter(o =>
+          o.orderNumber.toLowerCase().includes(searchLower) ||
+          o.senderName.toLowerCase().includes(searchLower) ||
+          o.receiverName.toLowerCase().includes(searchLower) ||
+          o.senderEmail.toLowerCase().includes(searchLower)
+        );
+      }
+
+      return {
+        orders: filteredOrders.slice(offset, offset + limit),
+        total: filteredOrders.length,
+      };
+    }),
+
+  // Admin: Get single order details
+  getOrderById: baseProcedure
+    .input(z.object({ orderId: z.string() }))
+    .query(async ({ input }) => {
+      const order = await db.query.orders.findFirst({
+        where: (orders, { eq }) => eq(orders.id, input.orderId),
+        with: {
+          delivery: {
+            with: {
+              partner: {
+                with: { user: true }
+              }
+            }
+          },
+          items: true,
+          user: true,
+          deliveryAddress: true,
+        }
+      });
+
+      return order || null;
+    }),
+
+  // Admin: Update order status
+  updateOrderStatus: baseProcedure
+    .input(
+      z.object({
+        orderId: z.string(),
+        status: z.enum(["pending", "processing", "out_for_delivery", "delivered", "cancelled", "refunded"]),
+        notes: z.string().optional(),
+      })
+    )
+    .mutation(async ({ input }) => {
+      const { orderId, status, notes } = input;
+
+      const [updatedOrder] = await db
+        .update(orders)
+        .set({
+          status,
+          notes: notes || undefined,
+          updatedAt: new Date(),
+        })
+        .where(eq(orders.id, orderId))
+        .returning();
+
+      return updatedOrder;
+    }),
+
+  // Admin: Update payment status
+  updatePaymentStatus: baseProcedure
+    .input(
+      z.object({
+        orderId: z.string(),
+        paymentStatus: z.enum(["pending", "completed", "failed", "refunded"]),
+      })
+    )
+    .mutation(async ({ input }) => {
+      const { orderId, paymentStatus } = input;
+
+      const [updatedOrder] = await db
+        .update(orders)
+        .set({
+          paymentStatus,
+          updatedAt: new Date(),
+        })
+        .where(eq(orders.id, orderId))
+        .returning();
+
+      return updatedOrder;
+    }),
+
+  // Admin: Update delivery status
+  updateDeliveryStatus: baseProcedure
+    .input(
+      z.object({
+        orderId: z.string(),
+        deliveryStatus: z.enum(["assigned", "picked_up", "in_transit", "out_for_delivery", "delivered", "failed"]),
+        notes: z.string().optional(),
+      })
+    )
+    .mutation(async ({ input }) => {
+      const { orderId, deliveryStatus, notes } = input;
+
+      const [delivery] = await db
+        .update(deliveries)
+        .set({
+          status: deliveryStatus,
+          deliveryNotes: notes || undefined,
+          updatedAt: new Date(),
+        })
+        .where(eq(deliveries.orderId, orderId))
+        .returning();
+
+      return delivery;
+    }),
+
   createOrder: baseProcedure
     .input(
       z.object({
