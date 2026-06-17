@@ -1,0 +1,35 @@
+﻿
+> my-app@0.1.0 build
+> next build
+
+node.exe : ΓÜá `images.domains` is deprecated in favor of `images.remotePatterns`. Please update next.config.ts to 
+protect your application from malicious users.
+At C:\Program Files\nodejs\npm.ps1:29 char:3
++   & $NODE_EXE $NPM_CLI_JS $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (ΓÜá `images.dom...alicious users.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+Γû▓ Next.js 16.1.6 (Turbopack)
+
+  Creating an optimized production build ...
+Γ£ô Compiled successfully in 6.5s
+  Running TypeScript ...
+Failed to compile.
+
+./components/gift-suggestion-form.tsx:42:65
+Type error: Property 'useMutation' does not exist on type 'DecorateMutationProcedure<{ input: { recipientAge?: number 
+| undefined; recipientGender?: string | undefined; interests?: string[] | undefined; budget?: number | undefined; 
+occasion?: string | undefined; relationship?: string | undefined; language?: string | undefined; }; output: { ...; }; 
+transformer: true; errorSh...'.
+
+[0m [90m 40 |[39m   [36mconst[39m [showResults[33m,[39m setShowResults] [33m=[39m 
+useState([36mfalse[39m)[33m;[39m
+ [90m 41 |[39m
+[31m[1m>[22m[39m[90m 42 |[39m   [36mconst[39m suggestGiftsMutation [33m=[39m 
+trpc[33m.[39mgiftSuggestion[33m.[39msuggestGifts[33m.[39museMutation({
+ [90m    |[39m                                                                 [31m[1m^[22m[39m
+ [90m 43 |[39m     onSuccess[33m:[39m (data) [33m=>[39m {
+ [90m 44 |[39m       setSuggestions(data[33m.[39msuggestions)[33m;[39m
+ [90m 45 |[39m       setShowResults([36mtrue[39m)[33m;[39m[0m
+Next.js build worker exited with code: 1 and signal: null
