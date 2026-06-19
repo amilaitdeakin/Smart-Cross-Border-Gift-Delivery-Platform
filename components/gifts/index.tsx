@@ -592,7 +592,7 @@ const productsData = [
     category: "Cakes",
     badge: "Fresh Baked",
     image:
-      "https://images.unsplash.com/photo-1586788224331-947f68671cf1?q=80&w=1200&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1635117492718-695a17a5977a?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cmVkJTIwdmVsdmV0JTIwYmlydGhkYXklMjBjYWtlfGVufDB8fDB8fHww",
     description:
       "Moist red velvet cake with cream cheese frosting, perfect for birthdays.",
     price: 45,
@@ -606,7 +606,7 @@ const productsData = [
     category: "Flowers",
     badge: "Cheerful",
     image:
-      "https://images.unsplash.com/photo-1490750967868-88aa4486c946?q=80&w=1200&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1601884928885-92a922f7962f?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8c3VuJTIwZmxvd2VyJTIwZGVsaWdodCUyMGJvdWd1ZXR8ZW58MHx8MHx8fDA%3D",
     description: "Bright sunflowers arranged with seasonal greens.",
     price: 35,
     oldPrice: 48,
@@ -632,7 +632,7 @@ const productsData = [
     category: "Combos",
     badge: "Date Night",
     image:
-      "https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=1200&auto=format&fit=crop",
+      "https://plus.unsplash.com/premium_photo-1673809129184-a65d23772437?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8ODh8fFJvbWFudGljJTIwRGlubmVyJTIwQ29tYm98ZW58MHx8MHx8fDA%3D",
     description:
       "Wine, chocolates, and roses for the perfect romantic evening.",
     price: 79,
@@ -711,7 +711,7 @@ const productsData = [
     category: "Personalized",
     badge: "Keepsake",
     image:
-      "https://images.unsplash.com/photo-1606828197523-6baecdb7087b?q=80&w=1200&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1591032729735-e487b4dafb55?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjA0fHxFbmdyYXZlZCUyMFBob3RvJTIwRnJhbWV8ZW58MHx8MHx8fDA%3D",
     description: "Wooden frame with custom engraving and photo slot.",
     price: 29,
     oldPrice: 42,
@@ -724,7 +724,7 @@ const productsData = [
     category: "Combos",
     badge: "Party Time",
     image:
-      "https://images.unsplash.com/photo-1559617309-f827781aa6b8?q=80&w=1200&auto=format&fit=crop",
+      "https://plus.unsplash.com/premium_photo-1661675916179-4f79e308d389?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTMxfHxLaWRzJTIwQmlydGhkYXklMjBDb21ib3xlbnwwfHwwfHx8MA%3D%3D",
     description: "Cake, balloons, and small gift for children's birthdays.",
     price: 49,
     oldPrice: 68,
@@ -733,7 +733,7 @@ const productsData = [
   },
   {
     id: 16,
-    title: "Silver Infinity Bracelet",
+    title: "Gold bangle",
     category: "Jewelry",
     badge: "Elegant",
     image:
@@ -750,7 +750,7 @@ const productsData = [
     category: "Plants",
     badge: "Mindful",
     image:
-      "https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?q=80&w=1200&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1695885629004-90389b97ad40?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTQxfHxCb25zYWklMjBUcmVlJTIwLSUyMFplbiUyMEdhcmRlbnxlbnwwfHwwfHx8MA%3D%3D",
     description: "Beautiful bonsai tree for meditation and decor.",
     price: 65,
     oldPrice: 85,
@@ -763,7 +763,7 @@ const productsData = [
     category: "Cakes",
     badge: "Rich",
     image:
-      "https://images.unsplash.com/photo-1606890658317-7d2e8bd92b78?q=80&w=1200&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1709195902163-7eee13e78970?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8Q2hvY29sYXRlJTIwVHJ1ZmZsZSUyMENha2V8ZW58MHx8MHx8fDA%3D",
     description: "Decadent chocolate truffle cake with ganache topping.",
     price: 42,
     oldPrice: 56,
