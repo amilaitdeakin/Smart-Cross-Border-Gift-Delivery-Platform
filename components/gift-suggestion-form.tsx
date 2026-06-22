@@ -126,14 +126,19 @@ export function GiftSuggestionForm() {
                     <Select
                       value={formData.recipientGender}
                       onValueChange={(value) =>
-                        handleInputChange("recipientGender", value)
+                        handleInputChange(
+                          "recipientGender",
+                          value === "__unspecified__" ? "" : value
+                        )
                       }
                     >
                       <SelectTrigger>
                         <SelectValue placeholder="Select gender" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="">Not specified</SelectItem>
+                        <SelectItem value="__unspecified__">
+                          Not specified
+                        </SelectItem>
                         <SelectItem value="Male">Male</SelectItem>
                         <SelectItem value="Female">Female</SelectItem>
                         <SelectItem value="Other">Other</SelectItem>
