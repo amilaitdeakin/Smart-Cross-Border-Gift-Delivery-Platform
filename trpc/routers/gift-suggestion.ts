@@ -2,7 +2,7 @@ import { createTRPCRouter, baseProcedure } from '../init';
 import {
   generateGiftSuggestions,
   type GiftSuggestionRequest,
-} from '@/lib/anthropic-client';
+} from '@/lib/openai-client';
 import { z } from 'zod';
 
 const giftSuggestionRequestSchema = z.object({
