@@ -1,4 +1,4 @@
-import { GiftSuggestionForm } from "@/components/gift-suggestion-form";
+import GiftSuggestionPageForm from "@/components/gift-suggestion-form";
 
 export const metadata = {
   title: "AI Gift Suggestion System",
@@ -6,5 +6,5 @@ export const metadata = {
 };
 
 export default function GiftSuggestionPage() {
-  return <GiftSuggestionForm />;
+  return <GiftSuggestionPageForm />;
 }

@@ -39,7 +39,7 @@ const NAV_LINKS = [
   { label: "Home", href: "/" },
   { label: "All Gifts", href: "/gifts" },
   { label: "Occasions", href: "/occasions" },
-  { label: "How It Works", href: "/how-it-works" },
+  { label: "Ai Suggestion", href: "/gifts/ai-suggestions" },
   { label: "Track Order", href: "/track-public" },
 ];
 
@@ -535,7 +535,7 @@ const Header = () => {
               ))}
 
               {/* Categories mega-menu */}
-              <div className="relative group">
+              {/*       <div className="relative group">
                 <button
                   className="lta-nav-link flex items-center gap-1"
                   aria-label="Categories menu"
@@ -563,7 +563,7 @@ const Header = () => {
                     ))}
                   </div>
                 </div>
-              </div>
+              </div> */}
             </nav>
           </div>
         </div>
@@ -739,7 +739,7 @@ const Header = () => {
               ))}
             </nav>
 
-            <div className="lta-divider" />
+            {/*             <div className="lta-divider" />
 
             <p className="lta-cat-title">Categories</p>
             <div className="flex flex-col gap-4">
@@ -762,7 +762,7 @@ const Header = () => {
                   </div>
                 </div>
               ))}
-            </div>
+            </div> */}
           </div>
         </div>
       )}

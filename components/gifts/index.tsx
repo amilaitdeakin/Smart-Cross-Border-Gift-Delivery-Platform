@@ -538,7 +538,7 @@ const productsData = [
     category: "Flowers",
     badge: "Best Seller",
     image:
-      "https://images.unsplash.com/photo-1520763185298-1b434c919102?q=80&w=1200&auto=format&fit=crop",
+      "https://plus.unsplash.com/premium_photo-1703631158408-6f6d3f984de3?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjV8fHJlZCUyMHJvc2VzJTIwYm91cXVldHxlbnwwfHwwfHx8MA%3D%3D",
     description:
       "A luxury handcrafted bouquet with premium roses and elegant wrapping.",
     price: 39,
@@ -737,7 +737,7 @@ const productsData = [
     category: "Jewelry",
     badge: "Elegant",
     image:
-      "https://images.unsplash.com/photo-1611652022419-a9419f74343d?q=80&w=1200&auto=format&fit=crop",
+      "https://plus.unsplash.com/premium_photo-1681276170076-d3860cc735f9?q=80&w=774&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     description: "Sterling silver bracelet with infinity symbol.",
     price: 42,
     oldPrice: 60,

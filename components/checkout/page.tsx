@@ -225,7 +225,7 @@ const CheckoutPage = () => {
             </div>
             <div className="space-y-3 text-left text-sm text-gray-600 mb-8">
               <p>📧 Confirmation email sent to your inbox</p>
-              <p>🚚 We'll notify you when your order is on its way</p>
+              <p>{`🚚 We'll notify you when your order is on its way`}</p>
               <p>🎁 Your gift will be beautifully packaged</p>
             </div>
             <div className="flex flex-col sm:flex-row gap-4">
@@ -526,7 +526,7 @@ const CheckoutPage = () => {
                       <CreditCard size={20} className="text-gray-400" />
                     </div>
 
-                    <div
+                    {/*      <div
                       className={`flex items-center justify-between p-4 border-2 rounded-2xl transition cursor-pointer ${
                         field.value === "paypal"
                           ? "border-orange-500 bg-orange-50/20"
@@ -551,7 +551,7 @@ const CheckoutPage = () => {
                       <span className="text-blue-600 font-bold italic">
                         PayPal
                       </span>
-                    </div>
+                    </div> */}
                   </>
                 )}
               />
@@ -760,7 +760,7 @@ const CheckoutPage = () => {
                 <p className="text-xs text-gray-500 mb-1">
                   Gift Message Preview
                 </p>
-                <p className="text-sm italic">"{giftMessage}"</p>
+                <p className="text-sm italic">{giftMessage}</p>
               </div>
             )}
           </div>
