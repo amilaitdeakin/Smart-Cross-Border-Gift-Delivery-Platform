@@ -190,7 +190,7 @@ export default function GiftSuggestionPageForm() {
                       <SelectTrigger className="rounded-xl border-[#eadfd4] focus:border-[#d96c28] focus:ring-[#d96c28]">
                         <SelectValue placeholder="Select gender" />
                       </SelectTrigger>
-                      <SelectContent>
+                      <SelectContent className="bg-white">
                         <SelectItem value="__unspecified__">
                           Not specified
                         </SelectItem>
@@ -258,7 +258,7 @@ export default function GiftSuggestionPageForm() {
                       <SelectTrigger className="rounded-xl border-[#eadfd4] focus:border-[#d96c28] focus:ring-[#d96c28]">
                         <SelectValue />
                       </SelectTrigger>
-                      <SelectContent>
+                      <SelectContent className="bg-white">
                         <SelectItem value="General">🎯 General</SelectItem>
                         <SelectItem value="Birthday">🎂 Birthday</SelectItem>
                         <SelectItem value="Wedding">💍 Wedding</SelectItem>
@@ -292,7 +292,7 @@ export default function GiftSuggestionPageForm() {
                       <SelectTrigger className="rounded-xl border-[#eadfd4] focus:border-[#d96c28] focus:ring-[#d96c28]">
                         <SelectValue />
                       </SelectTrigger>
-                      <SelectContent>
+                      <SelectContent className="bg-white">
                         <SelectItem value="Friend">🤝 Friend</SelectItem>
                         <SelectItem value="Family">👨‍👩‍👦 Family</SelectItem>
                         <SelectItem value="Colleague">💼 Colleague</SelectItem>
@@ -319,7 +319,7 @@ export default function GiftSuggestionPageForm() {
                       <SelectTrigger className="rounded-xl border-[#eadfd4] focus:border-[#d96c28] focus:ring-[#d96c28]">
                         <SelectValue />
                       </SelectTrigger>
-                      <SelectContent>
+                      <SelectContent className="bg-white">
                         <SelectItem value="English">🇬🇧 English</SelectItem>
                         <SelectItem value="Spanish">🇪🇸 Spanish</SelectItem>
                         <SelectItem value="French">🇫🇷 French</SelectItem>
