@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
-import { MessageCircle, X, Send } from "lucide-react";
+import { MessageCircle, X, Send, Sparkles, Gift, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 
@@ -11,6 +11,15 @@ interface Message {
   content: string;
   timestamp: Date;
 }
+
+// Quick reply suggestions
+const quickReplies = [
+  "🎁 Gift suggestions",
+  "🚚 Delivery info",
+  "💝 Personalized gifts",
+  "💰 Price ranges",
+  "🎂 Occasion gifts",
+];
 
 export default function LiveChatbot() {
   const [isOpen, setIsOpen] = useState(false);
@@ -26,6 +35,7 @@ export default function LiveChatbot() {
   const [inputValue, setInputValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -34,6 +44,14 @@ export default function LiveChatbot() {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  useEffect(() => {
+    if (isOpen) {
+      setTimeout(() => {
+        inputRef.current?.focus();
+      }, 300);
+    }
+  }, [isOpen]);
 
   const handleSendMessage = async () => {
     if (!inputValue.trim()) return;
@@ -95,6 +113,13 @@ export default function LiveChatbot() {
     }
   };
 
+  const handleQuickReply = (reply: string) => {
+    setInputValue(reply);
+    setTimeout(() => {
+      handleSendMessage();
+    }, 100);
+  };
+
   const handleKeyPress = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
@@ -108,26 +133,40 @@ export default function LiveChatbot() {
       {!isOpen && (
         <button
           onClick={() => setIsOpen(true)}
-          className="fixed bottom-6 right-6 z-40 flex items-center gap-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-full shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 cursor-pointer"
+          className="fixed bottom-6 right-6 z-40 flex items-center gap-2.5 bg-gradient-to-r from-[#d96c28] to-[#c85f20] text-white px-6 py-3.5 rounded-full shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300 cursor-pointer group"
           title="Open chat"
         >
-          <MessageCircle className="w-5 h-5" />
+          <div className="relative">
+            <MessageCircle className="w-5 h-5" />
+            <span className="absolute -top-1 -right-1 flex h-3 w-3">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-3 w-3 bg-green-500"></span>
+            </span>
+          </div>
           <span className="font-semibold">Chat with us</span>
         </button>
       )}
 
       {/* Chat Window */}
       {isOpen && (
-        <div className="fixed bottom-6 right-6 z-50 w-96 bg-white rounded-lg shadow-2xl border border-gray-200 flex flex-col h-96 md:h-[500px] animate-in fade-in slide-in-from-bottom-2">
+        <div className="fixed bottom-6 right-6 z-50 w-[400px] max-w-[calc(100vw-2rem)] bg-white rounded-3xl shadow-2xl border border-[#eadfd4] flex flex-col h-[520px] max-h-[calc(100vh-4rem)] animate-in fade-in slide-in-from-bottom-4 duration-300">
           {/* Header */}
-          <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-4 rounded-t-lg flex justify-between items-center">
-            <div>
-              <h3 className="font-bold text-lg">WorldWish Assistant</h3>
-              <p className="text-xs text-blue-100">Online & Ready to Help</p>
+          <div className="bg-gradient-to-r from-[#d96c28] to-[#c85f20] text-white p-5 rounded-t-3xl flex justify-between items-center">
+            <div className="flex items-center gap-3">
+              <div className="bg-white/20 p-2 rounded-xl">
+                <Gift className="w-5 h-5" />
+              </div>
+              <div>
+                <h3 className="font-bold text-lg">WorldWish Assistant</h3>
+                <p className="text-xs text-orange-100 flex items-center gap-1">
+                  <span className="inline-block w-2 h-2 bg-green-400 rounded-full animate-pulse"></span>
+                  Online & Ready to Help
+                </p>
+              </div>
             </div>
             <button
               onClick={() => setIsOpen(false)}
-              className="hover:bg-white/20 p-1 rounded transition-colors"
+              className="hover:bg-white/20 p-2 rounded-xl transition-colors"
               title="Close chat"
             >
               <X className="w-5 h-5" />
@@ -135,23 +174,29 @@ export default function LiveChatbot() {
           </div>
 
           {/* Messages */}
-          <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
+          <div className="flex-1 overflow-y-auto p-5 space-y-4 bg-[#f6f1eb]">
             {messages.map((message) => (
               <div
                 key={message.id}
                 className={`flex ${
                   message.role === "user" ? "justify-end" : "justify-start"
-                }`}
+                } animate-in fade-in slide-in-from-bottom-2 duration-200`}
               >
                 <div
-                  className={`max-w-xs px-4 py-2 rounded-lg ${
+                  className={`max-w-[80%] px-4 py-3 rounded-2xl ${
                     message.role === "user"
-                      ? "bg-blue-600 text-white rounded-br-none"
-                      : "bg-white text-gray-800 border border-gray-200 rounded-bl-none"
+                      ? "bg-[#d96c28] text-white rounded-br-none shadow-md"
+                      : "bg-white text-[#2d1b12] border border-[#eadfd4] rounded-bl-none shadow-sm"
                   }`}
                 >
-                  <p className="text-sm">{message.content}</p>
-                  <span className="text-xs opacity-70 mt-1 block">
+                  <p className="text-sm leading-relaxed">{message.content}</p>
+                  <span
+                    className={`text-xs mt-1.5 block ${
+                      message.role === "user"
+                        ? "text-orange-100"
+                        : "text-[#9c8779]"
+                    }`}
+                  >
                     {message.timestamp.toLocaleTimeString([], {
                       hour: "2-digit",
                       minute: "2-digit",
@@ -161,12 +206,12 @@ export default function LiveChatbot() {
               </div>
             ))}
             {isLoading && (
-              <div className="flex justify-start">
-                <div className="bg-white text-gray-800 border border-gray-200 px-4 py-2 rounded-lg rounded-bl-none">
-                  <div className="flex gap-1">
-                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-100"></div>
-                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce delay-200"></div>
+              <div className="flex justify-start animate-in fade-in slide-in-from-bottom-2 duration-200">
+                <div className="bg-white text-[#2d1b12] border border-[#eadfd4] px-5 py-3 rounded-2xl rounded-bl-none shadow-sm">
+                  <div className="flex gap-1.5">
+                    <div className="w-2.5 h-2.5 bg-[#d96c28] rounded-full animate-bounce"></div>
+                    <div className="w-2.5 h-2.5 bg-[#d96c28] rounded-full animate-bounce delay-100"></div>
+                    <div className="w-2.5 h-2.5 bg-[#d96c28] rounded-full animate-bounce delay-200"></div>
                   </div>
                 </div>
               </div>
@@ -174,29 +219,53 @@ export default function LiveChatbot() {
             <div ref={messagesEndRef} />
           </div>
 
+          {/* Quick Replies */}
+          {messages.length < 4 && !isLoading && (
+            <div className="px-4 py-2 bg-[#f6f1eb] border-t border-[#eadfd4]">
+              <div className="flex flex-wrap gap-2">
+                {quickReplies.map((reply, index) => (
+                  <button
+                    key={index}
+                    onClick={() => handleQuickReply(reply)}
+                    className="text-xs bg-white hover:bg-[#fde8d7] text-[#2d1b12] px-3 py-1.5 rounded-full border border-[#eadfd4] transition-colors hover:border-[#d96c28]"
+                  >
+                    {reply}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* Input */}
-          <div className="p-4 border-t border-gray-200 bg-white rounded-b-lg">
-            <div className="flex gap-2">
+          <div className="p-4 border-t border-[#eadfd4] bg-white rounded-b-3xl">
+            <div className="flex gap-2.5">
               <Input
+                ref={inputRef}
                 type="text"
                 placeholder="Type your message..."
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 onKeyPress={handleKeyPress}
                 disabled={isLoading}
-                className="flex-1 text-sm"
+                className="flex-1 text-sm rounded-full border-[#eadfd4] focus:border-[#d96c28] focus:ring-[#d96c28]"
               />
               <Button
                 onClick={handleSendMessage}
                 disabled={isLoading || !inputValue.trim()}
-                className="bg-blue-600 hover:bg-blue-700 text-white p-2 h-auto"
+                className="rounded-full bg-[#d96c28] hover:bg-[#c85f20] text-white p-3 h-auto w-11 flex items-center justify-center transition-all hover:scale-105"
               >
                 <Send className="w-4 h-4" />
               </Button>
             </div>
-            <p className="text-xs text-gray-500 mt-2">
-              💡 Ask about gifts, delivery, or orders!
-            </p>
+            <div className="flex items-center justify-between mt-2">
+              <p className="text-xs text-[#9c8779] flex items-center gap-1">
+                <Sparkles className="w-3 h-3 text-[#d96c28]" />
+                Powered by AI
+              </p>
+              <p className="text-xs text-[#9c8779]">
+                💡 Ask about gifts, delivery, or orders!
+              </p>
+            </div>
           </div>
         </div>
       )}

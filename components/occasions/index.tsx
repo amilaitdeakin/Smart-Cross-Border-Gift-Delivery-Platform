@@ -173,7 +173,7 @@ const occasions = [
     title: "Graduations",
     badge: "Proud Moments",
     image:
-      "https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=1200&auto=format&fit=crop",
+      "https://images.unsplash.com/photo-1526781480235-d79b4866aa9c?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MzV8fGdyYWR1YXRpb258ZW58MHx8MHx8fDA%3D",
     description:
       "Celebrate achievements with meaningful congratulation gifts and hampers.",
   },
