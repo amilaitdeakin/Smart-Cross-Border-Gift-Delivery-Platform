@@ -1,4 +1,3 @@
-/* eslint-disable react-hooks/set-state-in-effect */
 "use client";
 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -12,7 +11,6 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { categories } from "@/utils/categories";
 import {
-  ChevronDown,
   Gift,
   Heart,
   LayoutDashboard,
@@ -28,12 +26,13 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useMemo, useState, type KeyboardEvent } from "react";
 import { LoginModal } from "./model/login-modal";
 import { SignupModal } from "./model/signup-model";
 import { authClient } from "@/lib/auth-client";
 import Image from "next/image";
 import { useCartStore } from "@/store/cartStore";
+import { useRouter } from "next/navigation";
 
 const NAV_LINKS = [
   { label: "Home", href: "/" },
@@ -43,24 +42,96 @@ const NAV_LINKS = [
   { label: "Track Order", href: "/track-public" },
 ];
 
+type SearchSuggestion = {
+  label: string;
+  href: string;
+  group: string;
+  description: string;
+  keywords: string[];
+};
+
+const SEARCH_SUGGESTIONS: SearchSuggestion[] = categories.reduce<
+  SearchSuggestion[]
+>((suggestions, category) => {
+  category.items.forEach((item) => {
+    suggestions.push({
+      label: item.name,
+      href: item.href,
+      group: category.title,
+      description: `${category.title} · ${item.name}`,
+      keywords: [category.title, item.name],
+    });
+  });
+
+  return suggestions;
+}, [
+  {
+    label: "Chocolate Cake",
+    href: "/gifts?q=Chocolate%20Cake",
+    group: "Trending",
+    description: "Rich cakes and sweet treats",
+    keywords: ["chocolate", "cake", "sweet", "dessert"],
+  },
+  {
+    label: "Belgian Chocolates",
+    href: "/gifts?q=Belgian%20Chocolates",
+    group: "Trending",
+    description: "Premium chocolate gift ideas",
+    keywords: ["chocolate", "gift", "sweet"],
+  },
+  {
+    label: "Birthday Gifts",
+    href: "/gifts?q=Birthday%20Gifts",
+    group: "Occasions",
+    description: "Popular gifts for birthdays",
+    keywords: ["birthday", "gift", "celebration"],
+  },
+  {
+    label: "Anniversary Gifts",
+    href: "/gifts?q=Anniversary%20Gifts",
+    group: "Occasions",
+    description: "Romantic gift ideas",
+    keywords: ["anniversary", "gift", "romantic"],
+  },
+]);
+
+const normalizeSearch = (value: string) => value.trim().toLowerCase();
+
 const Header = () => {
   const { getTotalItems } = useCartStore();
+  const router = useRouter();
 
   const [searchOpen, setSearchOpen] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [cartCount, setCartCount] = useState(0);
   const [loginModalOpen, setLoginModalOpen] = useState(false);
   const [signupModalOpen, setSignupModalOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const cartItemCount = getTotalItems();
   const pathname = usePathname();
   const { data: session } = authClient.useSession();
   const isLoggedIn = !!session;
 
-  // Mock cart count - replace with real cart context
-  useEffect(() => {
-    setCartCount(3);
-  }, []);
+  const filteredSearchSuggestions = useMemo(() => {
+    const query = normalizeSearch(searchQuery);
+
+    if (!query) {
+      return [];
+    }
+
+    return SEARCH_SUGGESTIONS.filter((item) => {
+      const haystack = [
+        item.label,
+        item.group,
+        item.description,
+        ...item.keywords,
+      ]
+        .join(" ")
+        .toLowerCase();
+
+      return haystack.includes(query);
+    }).slice(0, 6);
+  }, [searchQuery]);
 
   const openLoginModal = () => setLoginModalOpen(true);
   const openSignupModal = () => setSignupModalOpen(true);
@@ -73,6 +144,27 @@ const Header = () => {
   const switchToLogin = () => {
     setSignupModalOpen(false);
     setLoginModalOpen(true);
+  };
+
+  const handleSearch = (value: string) => {
+    const query = value.trim();
+
+    if (!query) {
+      return;
+    }
+
+    router.push(`/gifts?q=${encodeURIComponent(query)}`);
+    setSearchOpen(false);
+    setMobileOpen(false);
+  };
+
+  const handleSearchKeyDown = (
+    event: KeyboardEvent<HTMLInputElement>
+  ) => {
+    if (event.key === "Enter") {
+      event.preventDefault();
+      handleSearch(searchQuery);
+    }
   };
 
   return (
@@ -115,6 +207,55 @@ const Header = () => {
         .lta-search-input:focus {
           border-color: #c8622a;
           box-shadow: 0 0 0 3px rgba(200,98,42,0.12);
+        }
+
+        .lta-search-suggestions {
+          position: absolute;
+          left: 0;
+          right: 0;
+          top: calc(100% + 10px);
+          z-index: 60;
+          background: #fffdf9;
+          border: 1px solid #f0dece;
+          border-radius: 16px;
+          box-shadow: 0 18px 45px rgba(100,40,0,0.12);
+          overflow: hidden;
+        }
+        .lta-search-suggestion-header {
+          padding: 12px 16px 8px;
+          font-size: 11px;
+          font-weight: 700;
+          text-transform: uppercase;
+          letter-spacing: 0.08em;
+          color: #c8622a;
+        }
+        .lta-search-suggestion-item {
+          width: 100%;
+          text-align: left;
+          padding: 12px 16px;
+          display: flex;
+          align-items: flex-start;
+          gap: 10px;
+          border-top: 1px solid #f5e7db;
+          transition: background 0.15s, color 0.15s;
+        }
+        .lta-search-suggestion-item:hover {
+          background: #fff4ec;
+        }
+        .lta-search-suggestion-name {
+          font-size: 14px;
+          font-weight: 600;
+          color: #4a2800;
+        }
+        .lta-search-suggestion-meta {
+          font-size: 12px;
+          color: #8d6c55;
+          margin-top: 2px;
+        }
+        .lta-search-suggestion-cta {
+          margin-top: 8px;
+          border-top: 1px solid #f5e7db;
+          padding: 12px 16px 14px;
         }
 
         .lta-nav-link {
@@ -372,7 +513,47 @@ const Header = () => {
                   className="lta-search-input"
                   placeholder="Search gifts, occasions, or recipients..."
                   aria-label="Search gifts"
+                  value={searchQuery}
+                  onChange={(event) => setSearchQuery(event.target.value)}
+                  onKeyDown={handleSearchKeyDown}
                 />
+                {filteredSearchSuggestions.length > 0 && (
+                  <div className="lta-search-suggestions">
+                    <div className="lta-search-suggestion-header">
+                      Suggested gifts
+                    </div>
+                    {filteredSearchSuggestions.map((item) => (
+                      <button
+                        key={`${item.group}-${item.label}`}
+                        type="button"
+                        className="lta-search-suggestion-item"
+                        onClick={() => {
+                          setSearchQuery(item.label);
+                          handleSearch(item.label);
+                        }}
+                      >
+                        <div className="mt-1 h-2 w-2 rounded-full bg-[#c8622a]" />
+                        <div>
+                          <div className="lta-search-suggestion-name">
+                            {item.label}
+                          </div>
+                          <div className="lta-search-suggestion-meta">
+                            {item.description}
+                          </div>
+                        </div>
+                      </button>
+                    ))}
+                    <div className="lta-search-suggestion-cta">
+                      <button
+                        type="button"
+                        className="text-sm font-medium text-[#c8622a] hover:text-[#b5531e]"
+                        onClick={() => handleSearch(searchQuery)}
+                      >
+                        Search for &quot;{searchQuery.trim()}&quot;
+                      </button>
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* Actions */}
@@ -638,7 +819,50 @@ const Header = () => {
                 placeholder="Search gifts, occasions, or recipients..."
                 aria-label="Search"
                 aria-describedby="search-examples"
+                value={searchQuery}
+                onChange={(event) => setSearchQuery(event.target.value)}
+                onKeyDown={handleSearchKeyDown}
               />
+              {filteredSearchSuggestions.length > 0 && (
+                <div
+                  className="lta-search-suggestions"
+                  style={{ position: "static", marginTop: "14px" }}
+                >
+                  <div className="lta-search-suggestion-header">
+                    Suggested gifts
+                  </div>
+                  {filteredSearchSuggestions.map((item) => (
+                    <button
+                      key={`${item.group}-${item.label}`}
+                      type="button"
+                      className="lta-search-suggestion-item"
+                      onClick={() => {
+                        setSearchQuery(item.label);
+                        handleSearch(item.label);
+                      }}
+                    >
+                      <div className="mt-1 h-2 w-2 rounded-full bg-[#c8622a]" />
+                      <div>
+                        <div className="lta-search-suggestion-name">
+                          {item.label}
+                        </div>
+                        <div className="lta-search-suggestion-meta">
+                          {item.description}
+                        </div>
+                      </div>
+                    </button>
+                  ))}
+                  <div className="lta-search-suggestion-cta">
+                    <button
+                      type="button"
+                      className="text-sm font-medium text-[#c8622a] hover:text-[#b5531e]"
+                      onClick={() => handleSearch(searchQuery)}
+                    >
+                      Search for &quot;{searchQuery.trim()}&quot;
+                    </button>
+                  </div>
+                </div>
+              )}
             </div>
             <p
               id="search-examples"

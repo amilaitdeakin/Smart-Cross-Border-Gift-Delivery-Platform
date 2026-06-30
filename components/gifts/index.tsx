@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import Image from "next/image";
 import {
   Gem,
@@ -23,9 +23,15 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { Separator } from "@/components/ui/separator";
 import { useCartStore, type Product } from "@/store/cartStore";
 
-export default function ExploreAllGiftsPage() {
+type ExploreAllGiftsPageProps = {
+  initialQuery?: string;
+};
+
+export default function ExploreAllGiftsPage({
+  initialQuery = "",
+}: ExploreAllGiftsPageProps) {
   const [selectedCategory, setSelectedCategory] = useState("All");
-  const [searchQuery, setSearchQuery] = useState("");
+  const [searchQuery, setSearchQuery] = useState(() => initialQuery);
   const [visibleCount, setVisibleCount] = useState(8);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [showToast, setShowToast] = useState(false);
