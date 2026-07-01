@@ -20,6 +20,17 @@ You can start editing the page by modifying `app/page.tsx`. The page auto-update
 
 This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
+## Stripe setup
+
+Add these variables in `.env.local` to enable card payment method creation on checkout:
+
+```env
+NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_test_...
+STRIPE_SECRET_KEY=sk_test_...
+```
+
+`NEXT_PUBLIC_STRIPE_SECRET_KEY` is also supported as a fallback for existing setups, but `STRIPE_SECRET_KEY` is recommended.
+
 ## Learn More
 
 To learn more about Next.js, take a look at the following resources:

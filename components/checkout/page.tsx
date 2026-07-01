@@ -1,6 +1,9 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
+import { CardElement, Elements, useElements, useStripe } from "@stripe/react-stripe-js";
+import { loadStripe } from "@stripe/stripe-js";
 import {
   Check,
   CreditCard,
@@ -11,73 +14,55 @@ import {
 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod";
 import { useCartStore } from "@/store/cartStore";
 import { useTRPC } from "@/trpc/client";
-import { useMutation } from "@tanstack/react-query";
 import { authClient } from "@/lib/auth-client";
 
 // Form validation schema
-const checkoutSchema = z
-  .object({
-    // Delivery Information
-    firstName: z.string().min(1, "First name is required"),
-    lastName: z.string().min(1, "Last name is required"),
-    address: z.string().min(1, "Address is required"),
-    apartment: z.string().optional(),
-    city: z.string().min(1, "City is required"),
-    postalCode: z.string().min(1, "Postal code is required"),
-    phone: z.string().min(1, "Phone number is required"),
-    deliveryDate: z.string().min(1, "Delivery date is required"),
-    deliveryInstruction: z.string().optional(),
+const checkoutSchema = z.object({
+  // Delivery Information
+  firstName: z.string().min(1, "First name is required"),
+  lastName: z.string().min(1, "Last name is required"),
+  address: z.string().min(1, "Address is required"),
+  apartment: z.string().optional(),
+  city: z.string().min(1, "City is required"),
+  postalCode: z.string().min(1, "Postal code is required"),
+  phone: z.string().min(1, "Phone number is required"),
+  deliveryDate: z.string().min(1, "Delivery date is required"),
+  deliveryInstruction: z.string().optional(),
 
-    // Gift Message
-    giftMessage: z.string().optional(),
-    messageTitle: z.string().optional(),
+  // Gift Message
+  giftMessage: z.string().optional(),
+  messageTitle: z.string().optional(),
 
-    // Payment
-    paymentMethod: z.enum(["card", "paypal"]),
-
-    // Card details (conditional)
-    cardNumber: z.string().optional(),
-    cardholderName: z.string().optional(),
-    expiryDate: z.string().optional(),
-    cvv: z.string().optional(),
-    userId: z.string().optional(),
-  })
-  .refine(
-    (data) => {
-      if (data.paymentMethod === "card") {
-        return (
-          data.cardNumber && data.cardholderName && data.expiryDate && data.cvv
-        );
-      }
-      return true;
-    },
-    {
-      message: "Card details are required for card payment",
-      path: ["cardNumber"],
-    },
-  );
+  // Payment
+  paymentMethod: z.enum(["card", "paypal"]),
+  userId: z.string().optional(),
+});
 
 type CheckoutFormData = z.infer<typeof checkoutSchema>;
+const stripePromise = process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
+  ? loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY)
+  : null;
 
-const CheckoutPage = () => {
-  const router = useRouter();
-  const { products, getTotalItems, getTotalPrice, clearCart } = useCartStore();
+const CheckoutForm = () => {
+  const { products, getTotalPrice, clearCart } = useCartStore();
   const trpc = useTRPC();
   const createOrderMutation = useMutation(
     trpc.order.createOrder.mutationOptions(),
   );
   const { data: session } = authClient.useSession();
+  const stripe = useStripe();
+  const elements = useElements();
 
   const [isProcessing, setIsProcessing] = useState(false);
   const [orderComplete, setOrderComplete] = useState(false);
   const [orderNumber, setOrderNumber] = useState("");
   const [showAiMessage, setShowAiMessage] = useState(false);
+  const [paymentError, setPaymentError] = useState<string | null>(null);
 
   const {
     register,
@@ -101,10 +86,6 @@ const CheckoutPage = () => {
       giftMessage: "",
       messageTitle: "",
       paymentMethod: "card",
-      cardNumber: "",
-      cardholderName: "",
-      expiryDate: "",
-      cvv: "",
       userId: session?.user.id,
     },
     mode: "onChange",
@@ -115,7 +96,6 @@ const CheckoutPage = () => {
   const deliveryDate = watch("deliveryDate");
 
   const subtotal = getTotalPrice();
-  const cartItemCount = getTotalItems();
   const delivery = subtotal > 50 ? 0 : 12;
   const serviceFee = 5;
   const total = subtotal + delivery + serviceFee;
@@ -145,9 +125,62 @@ const CheckoutPage = () => {
       return;
     }
 
+    setPaymentError(null);
     setIsProcessing(true);
 
     try {
+      let stripePaymentMethodId: string | undefined;
+
+      if (data.paymentMethod === "card") {
+        if (!stripe || !elements) {
+          throw new Error("Stripe is not ready yet. Please try again.");
+        }
+
+        const cardElement = elements.getElement(CardElement);
+        if (!cardElement) {
+          throw new Error("Card details are missing. Please enter card details.");
+        }
+
+        const setupIntentResponse = await fetch("/api/stripe/setup-intent", {
+          method: "POST",
+        });
+
+        if (!setupIntentResponse.ok) {
+          throw new Error("Unable to initialize secure Stripe payment setup.");
+        }
+
+        const { clientSecret } = (await setupIntentResponse.json()) as {
+          clientSecret?: string;
+        };
+
+        if (!clientSecret) {
+          throw new Error("Stripe setup failed. Missing setup client secret.");
+        }
+
+        const { error, setupIntent } = await stripe.confirmCardSetup(
+          clientSecret,
+          {
+            payment_method: {
+              card: cardElement,
+              billing_details: {
+                name: `${data.firstName} ${data.lastName}`,
+                phone: data.phone,
+              },
+            },
+          },
+        );
+
+        if (error) {
+          throw new Error(error.message || "Unable to create Stripe payment method.");
+        }
+
+        if (typeof setupIntent?.payment_method !== "string") {
+          throw new Error("Stripe payment method was not created correctly.");
+        }
+
+        stripePaymentMethodId = setupIntent.payment_method;
+      }
+
       const response = await createOrderMutation.mutateAsync({
         senderName: "Guest",
         senderEmail: "",
@@ -162,6 +195,7 @@ const CheckoutPage = () => {
         deliveryInstruction: data.deliveryInstruction,
         giftMessage: data.giftMessage,
         paymentMethod: data.paymentMethod,
+        stripePaymentMethodId,
         items: products.map((p) => ({
           giftId: p.id.toString(),
           quantity: p.quantity || 1,
@@ -176,6 +210,11 @@ const CheckoutPage = () => {
         clearCart();
       }
     } catch (error) {
+      setPaymentError(
+        error instanceof Error
+          ? error.message
+          : "Payment failed. Please review your details and try again.",
+      );
       console.error("Order creation failed:", error);
     } finally {
       setIsProcessing(false);
@@ -559,76 +598,32 @@ const CheckoutPage = () => {
 
             {paymentMethod === "card" && (
               <div className="mt-4 animate-in fade-in slide-in-from-top-2 space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <label className="text-sm font-semibold">Card Number</label>
-                    <input
-                      type="text"
-                      {...register("cardNumber")}
-                      placeholder="1234 5678 9012 3456"
-                      className={`w-full p-3 rounded-xl border ${
-                        errors.cardNumber ? "border-red-500" : "border-gray-200"
-                      } bg-gray-50`}
+                <div className="space-y-2">
+                  <label className="text-sm font-semibold">Card Details</label>
+                  <div className="w-full rounded-xl border border-gray-200 bg-gray-50 p-4">
+                    <CardElement
+                      options={{
+                        hidePostalCode: true,
+                        style: {
+                          base: {
+                            color: "#1f2937",
+                            fontFamily: "system-ui, sans-serif",
+                            fontSize: "16px",
+                            "::placeholder": {
+                              color: "#9ca3af",
+                            },
+                          },
+                        },
+                      }}
                     />
-                    {errors.cardNumber && (
-                      <p className="text-red-500 text-xs">
-                        {errors.cardNumber.message}
-                      </p>
-                    )}
                   </div>
-                  <div className="space-y-2">
-                    <label className="text-sm font-semibold">
-                      Cardholder Name
-                    </label>
-                    <input
-                      type="text"
-                      {...register("cardholderName")}
-                      placeholder="John Doe"
-                      className={`w-full p-3 rounded-xl border ${
-                        errors.cardholderName
-                          ? "border-red-500"
-                          : "border-gray-200"
-                      } bg-gray-50`}
-                    />
-                    {errors.cardholderName && (
-                      <p className="text-red-500 text-xs">
-                        {errors.cardholderName.message}
-                      </p>
-                    )}
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-sm font-semibold">Expiry Date</label>
-                    <input
-                      type="text"
-                      {...register("expiryDate")}
-                      placeholder="MM/YY"
-                      className={`w-full p-3 rounded-xl border ${
-                        errors.expiryDate ? "border-red-500" : "border-gray-200"
-                      } bg-gray-50`}
-                    />
-                    {errors.expiryDate && (
-                      <p className="text-red-500 text-xs">
-                        {errors.expiryDate.message}
-                      </p>
-                    )}
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-sm font-semibold">CVV</label>
-                    <input
-                      type="password"
-                      {...register("cvv")}
-                      placeholder="123"
-                      className={`w-full p-3 rounded-xl border ${
-                        errors.cvv ? "border-red-500" : "border-gray-200"
-                      } bg-gray-50`}
-                    />
-                    {errors.cvv && (
-                      <p className="text-red-500 text-xs">
-                        {errors.cvv.message}
-                      </p>
-                    )}
-                  </div>
+                  <p className="text-xs text-gray-500">
+                    Your card details are securely encrypted by Stripe.
+                  </p>
                 </div>
+                {paymentError && (
+                  <p className="text-sm text-red-600">{paymentError}</p>
+                )}
               </div>
             )}
           </section>
@@ -700,7 +695,11 @@ const CheckoutPage = () => {
             <button
               type="submit"
               onClick={handleSubmit(onSubmit)}
-              disabled={isProcessing || !isValid}
+              disabled={
+                isProcessing ||
+                !isValid ||
+                (paymentMethod === "card" && !stripePromise)
+              }
               className="w-full bg-[#D36B31] text-white py-4 rounded-2xl font-bold text-lg hover:bg-[#b85a28] transition shadow-lg mb-3 disabled:opacity-50 disabled:cursor-not-allowed"
             >
               {isProcessing ? (
@@ -767,6 +766,28 @@ const CheckoutPage = () => {
         </aside>
       </main>
     </div>
+  );
+};
+
+const CheckoutPage = () => {
+  if (!stripePromise) {
+    return (
+      <div className="min-h-screen bg-[#FFFBF5] p-4 md:p-8 lg:p-12 font-sans text-[#3D2C1F]">
+        <div className="max-w-2xl mx-auto text-center bg-white rounded-3xl p-8 border border-gray-100 shadow-sm">
+          <h1 className="text-2xl font-bold mb-2">Stripe is not configured</h1>
+          <p className="text-gray-600">
+            Please set NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY in .env.local to enable
+            secure card payments.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <Elements stripe={stripePromise}>
+      <CheckoutForm />
+    </Elements>
   );
 };
 

@@ -1,7 +1,7 @@
 import { z } from "zod";
 import { createTRPCRouter, baseProcedure } from "../init";
 import { db } from "@/db";
-import { orders, orderItems, addresses, gifts, deliveries } from "@/db/schema";
+import { orders, orderItems, addresses, gifts, deliveries, payments } from "@/db/schema";
 import { eq, or, inArray } from "drizzle-orm";
 
 
@@ -168,6 +168,7 @@ export const orderRouter = createTRPCRouter({
         deliveryInstruction: z.string().optional(),
         giftMessage: z.string().optional(),
         paymentMethod: z.string(),
+        stripePaymentMethodId: z.string().optional(),
         userId: z.string(),
         items: z.array(
           z.object({
@@ -258,6 +259,19 @@ export const orderRouter = createTRPCRouter({
           totalLkr: (finalTotal * 200).toString(),
         })
         .where(eq(orders.id, newOrder.id));
+
+      await db.insert(payments).values({
+        orderId: newOrder.id,
+        paymentMethod: input.paymentMethod,
+        transactionId: null,
+        amountLkr: (finalTotal * 200).toString(),
+        amountAud: finalTotal.toString(),
+        status: "pending",
+        paymentDetails: input.stripePaymentMethodId
+          ? { stripePaymentMethodId: input.stripePaymentMethodId }
+          : null,
+        paidAt: null,
+      });
 
       return { success: true, orderNumber };
     }),
