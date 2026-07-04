@@ -1,8 +1,11 @@
 import { z } from "zod";
 import { createTRPCRouter, baseProcedure } from "../init";
 import { db } from "@/db";
-import { orders, orderItems, addresses, gifts, deliveries } from "@/db/schema";
+import { orders, orderItems, addresses, gifts, deliveries, payments } from "@/db/schema";
 import { eq, or, inArray } from "drizzle-orm";
+import Stripe from "stripe";
+
+const stripe = new Stripe(process.env.NEXT_PUBLIC_STRIPE_SECRET_KEY || "");
 
 
 
@@ -259,7 +262,93 @@ export const orderRouter = createTRPCRouter({
         })
         .where(eq(orders.id, newOrder.id));
 
-      return { success: true, orderNumber };
+      let clientSecret: string | null = null;
+      if (input.paymentMethod === "card") {
+        try {
+          const paymentIntent = await stripe.paymentIntents.create({
+            amount: Math.round(finalTotal * 100),
+            currency: "aud",
+            metadata: {
+              orderId: newOrder.id,
+              orderNumber: orderNumber,
+            },
+          });
+          clientSecret = paymentIntent.client_secret;
+        } catch (stripeError) {
+          console.error("Stripe payment intent creation failed:", stripeError);
+        }
+      }
+
+      return {
+        success: true,
+        orderId: newOrder.id,
+        orderNumber,
+        clientSecret,
+      };
+    }),
+
+  confirmOrderPayment: baseProcedure
+    .input(
+      z.object({
+        orderId: z.string(),
+        paymentIntentId: z.string(),
+      })
+    )
+    .mutation(async ({ input }) => {
+      const { orderId, paymentIntentId } = input;
+
+      // 1. Fetch payment intent from Stripe to verify status
+      const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
+
+      if (paymentIntent.status !== "succeeded") {
+        throw new Error("Payment was not successful or is still pending.");
+      }
+
+      // 2. Fetch the order
+      const [order] = await db
+        .select()
+        .from(orders)
+        .where(eq(orders.id, orderId));
+
+      if (!order) {
+        throw new Error("Order not found.");
+      }
+
+      // Verify that the payment intent metadata matches this order
+      if (paymentIntent.metadata.orderId !== orderId) {
+        throw new Error("Payment intent metadata mismatch.");
+      }
+
+      // Verify that the amount is correct (Stripe amount is in cents)
+      const expectedAmountCents = Math.round(parseFloat(order.totalAud) * 100);
+      if (paymentIntent.amount !== expectedAmountCents) {
+        throw new Error("Payment intent amount mismatch.");
+      }
+
+      // Update the order status to paid / processing
+      await db
+        .update(orders)
+        .set({
+          paymentStatus: "completed",
+          status: "processing",
+          updatedAt: new Date(),
+        })
+        .where(eq(orders.id, orderId));
+
+      // Insert payment record
+      await db.insert(payments).values({
+        orderId,
+        paymentMethod: "card",
+        transactionId: paymentIntentId,
+        amountAud: (paymentIntent.amount / 100).toString(),
+        amountLkr: ((paymentIntent.amount / 100) * 200).toString(),
+        currency: "AUD",
+        status: "completed",
+        paymentDetails: paymentIntent as any,
+        paidAt: new Date(),
+      });
+
+      return { success: true };
     }),
 
   trackOrder: baseProcedure

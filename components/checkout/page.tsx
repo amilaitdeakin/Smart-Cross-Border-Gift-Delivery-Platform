@@ -19,6 +19,9 @@ import { useCartStore } from "@/store/cartStore";
 import { useTRPC } from "@/trpc/client";
 import { useMutation } from "@tanstack/react-query";
 import { authClient } from "@/lib/auth-client";
+import { CardElement, useStripe, useElements } from "@stripe/react-stripe-js";
+import { toast } from "sonner";
+
 
 // Form validation schema
 const checkoutSchema = z
@@ -42,35 +45,35 @@ const checkoutSchema = z
     paymentMethod: z.enum(["card", "paypal"]),
 
     // Card details (conditional)
-    cardNumber: z.string().optional(),
     cardholderName: z.string().optional(),
-    expiryDate: z.string().optional(),
-    cvv: z.string().optional(),
     userId: z.string().optional(),
   })
   .refine(
     (data) => {
       if (data.paymentMethod === "card") {
-        return (
-          data.cardNumber && data.cardholderName && data.expiryDate && data.cvv
-        );
+        return !!data.cardholderName;
       }
       return true;
     },
     {
-      message: "Card details are required for card payment",
-      path: ["cardNumber"],
+      message: "Cardholder name is required for card payment",
+      path: ["cardholderName"],
     },
   );
 
 type CheckoutFormData = z.infer<typeof checkoutSchema>;
 
 const CheckoutPage = () => {
+  const stripe = useStripe();
+  const elements = useElements();
   const router = useRouter();
   const { products, getTotalItems, getTotalPrice, clearCart } = useCartStore();
   const trpc = useTRPC();
   const createOrderMutation = useMutation(
     trpc.order.createOrder.mutationOptions(),
+  );
+  const confirmPaymentMutation = useMutation(
+    trpc.order.confirmOrderPayment.mutationOptions(),
   );
   const { data: session } = authClient.useSession();
 
@@ -101,10 +104,7 @@ const CheckoutPage = () => {
       giftMessage: "",
       messageTitle: "",
       paymentMethod: "card",
-      cardNumber: "",
       cardholderName: "",
-      expiryDate: "",
-      cvv: "",
       userId: session?.user.id,
     },
     mode: "onChange",
@@ -141,7 +141,12 @@ const CheckoutPage = () => {
 
   const onSubmit = async (data: CheckoutFormData) => {
     if (!session) {
-      alert("Please login to checkout");
+      toast.error("Please login to checkout");
+      return;
+    }
+
+    if (data.paymentMethod === "card" && (!stripe || !elements)) {
+      toast.error("Stripe is loading. Please try again in a few seconds.");
       return;
     }
 
@@ -170,13 +175,80 @@ const CheckoutPage = () => {
         userId: session?.user.id || "",
       });
 
-      if (response.success) {
+      if (!response.success || !response.orderId) {
+        toast.error("Failed to create order in database");
+        setIsProcessing(false);
+        return;
+      }
+
+      if (data.paymentMethod === "card") {
+        if (!stripe || !elements) {
+          toast.error("Stripe has not loaded. Please try again.");
+          setIsProcessing(false);
+          return;
+        }
+
+        if (!response.clientSecret) {
+          toast.error("Server did not return a payment secret");
+          setIsProcessing(false);
+          return;
+        }
+
+        const cardElement = elements.getElement(CardElement);
+        if (!cardElement) {
+          toast.error("Credit card element was not found in page");
+          setIsProcessing(false);
+          return;
+        }
+
+        const { error: stripeError, paymentIntent } = await stripe.confirmCardPayment(response.clientSecret, {
+          payment_method: {
+            card: cardElement,
+            billing_details: {
+              name: data.cardholderName,
+              phone: data.phone,
+              address: {
+                line1: data.address,
+                city: data.city,
+                postal_code: data.postalCode,
+              },
+            },
+          },
+        });
+
+        if (stripeError) {
+          toast.error(stripeError.message || "Payment failed");
+          setIsProcessing(false);
+          return;
+        }
+
+        if (paymentIntent && paymentIntent.status === "succeeded") {
+          const confirmResponse = await confirmPaymentMutation.mutateAsync({
+            orderId: response.orderId,
+            paymentIntentId: paymentIntent.id,
+          });
+
+          if (confirmResponse.success) {
+            setOrderNumber(response.orderNumber);
+            setOrderComplete(true);
+            clearCart();
+            toast.success("Order placed and payment confirmed!");
+          } else {
+            toast.error("Payment succeeded but server failed to verify order.");
+          }
+        } else {
+          toast.error("Stripe payment status was not succeeded.");
+        }
+      } else {
+        // Fallback for non-card payment method (simulated)
         setOrderNumber(response.orderNumber);
         setOrderComplete(true);
         clearCart();
+        toast.success("Order placed successfully!");
       }
     } catch (error) {
       console.error("Order creation failed:", error);
+      toast.error("An error occurred during checkout. Please try again.");
     } finally {
       setIsProcessing(false);
     }
@@ -558,76 +630,54 @@ const CheckoutPage = () => {
             </div>
 
             {paymentMethod === "card" && (
-              <div className="mt-4 animate-in fade-in slide-in-from-top-2 space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <label className="text-sm font-semibold">Card Number</label>
-                    <input
-                      type="text"
-                      {...register("cardNumber")}
-                      placeholder="1234 5678 9012 3456"
-                      className={`w-full p-3 rounded-xl border ${
-                        errors.cardNumber ? "border-red-500" : "border-gray-200"
-                      } bg-gray-50`}
+              <div className="mt-6 animate-in fade-in slide-in-from-top-2 space-y-4">
+                <div className="space-y-2">
+                  <label className="text-sm font-semibold text-[#3D2C1F]">
+                    Cardholder Name <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    {...register("cardholderName")}
+                    placeholder="John Doe"
+                    className={`w-full p-3 rounded-xl border ${
+                      errors.cardholderName
+                        ? "border-red-500"
+                        : "border-gray-200"
+                    } bg-orange-50/30 focus:outline-none focus:ring-2 focus:ring-orange-200`}
+                  />
+                  {errors.cardholderName && (
+                    <p className="text-red-500 text-xs">
+                      {errors.cardholderName.message}
+                    </p>
+                  )}
+                </div>
+
+                <div className="space-y-2">
+                  <label className="text-sm font-semibold text-[#3D2C1F]">
+                    Card Details <span className="text-red-500">*</span>
+                  </label>
+                  <div className="p-4 rounded-xl border border-gray-200 bg-orange-50/30 focus-within:ring-2 focus-within:ring-orange-200 transition">
+                    <CardElement
+                      options={{
+                        style: {
+                          base: {
+                            fontSize: "16px",
+                            color: "#3D2C1F",
+                            fontFamily: "Inter, system-ui, sans-serif",
+                            "::placeholder": {
+                              color: "#a0aec0",
+                            },
+                          },
+                          invalid: {
+                            color: "#ef4444",
+                          },
+                        },
+                      }}
                     />
-                    {errors.cardNumber && (
-                      <p className="text-red-500 text-xs">
-                        {errors.cardNumber.message}
-                      </p>
-                    )}
                   </div>
-                  <div className="space-y-2">
-                    <label className="text-sm font-semibold">
-                      Cardholder Name
-                    </label>
-                    <input
-                      type="text"
-                      {...register("cardholderName")}
-                      placeholder="John Doe"
-                      className={`w-full p-3 rounded-xl border ${
-                        errors.cardholderName
-                          ? "border-red-500"
-                          : "border-gray-200"
-                      } bg-gray-50`}
-                    />
-                    {errors.cardholderName && (
-                      <p className="text-red-500 text-xs">
-                        {errors.cardholderName.message}
-                      </p>
-                    )}
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-sm font-semibold">Expiry Date</label>
-                    <input
-                      type="text"
-                      {...register("expiryDate")}
-                      placeholder="MM/YY"
-                      className={`w-full p-3 rounded-xl border ${
-                        errors.expiryDate ? "border-red-500" : "border-gray-200"
-                      } bg-gray-50`}
-                    />
-                    {errors.expiryDate && (
-                      <p className="text-red-500 text-xs">
-                        {errors.expiryDate.message}
-                      </p>
-                    )}
-                  </div>
-                  <div className="space-y-2">
-                    <label className="text-sm font-semibold">CVV</label>
-                    <input
-                      type="password"
-                      {...register("cvv")}
-                      placeholder="123"
-                      className={`w-full p-3 rounded-xl border ${
-                        errors.cvv ? "border-red-500" : "border-gray-200"
-                      } bg-gray-50`}
-                    />
-                    {errors.cvv && (
-                      <p className="text-red-500 text-xs">
-                        {errors.cvv.message}
-                      </p>
-                    )}
-                  </div>
+                  <p className="text-xs text-gray-500">
+                    Your card details are securely encrypted and processed directly by Stripe.
+                  </p>
                 </div>
               </div>
             )}
