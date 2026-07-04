@@ -1,10 +1,11 @@
 import Checkout from "@/components/checkout/page";
+import { StripeProvider } from "@/components/checkout/stripe-provider";
 
 const CheckoutPage = () => {
   return (
-    <div>
+    <StripeProvider>
       <Checkout />
-    </div>
+    </StripeProvider>
   );
 };
 
