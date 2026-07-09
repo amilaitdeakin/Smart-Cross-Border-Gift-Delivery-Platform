@@ -564,13 +564,13 @@ export default function FeaturedGifts() {
                 {/* Price */}
                 <div className="flex items-end gap-2">
                   <span className="text-2xl font-bold text-[#c8622a]">
-                    Rs. {(gift.price * 200).toLocaleString()}
+                    ${gift.price}
                   </span>
                   <span className="text-sm text-gray-400 line-through mb-1">
-                    Rs. {(gift.originalPrice * 200).toLocaleString()}
+                    ${gift.originalPrice}
                   </span>
                   <span className="text-xs bg-green-100 text-green-600 px-1.5 py-0.5 rounded-full ml-auto">
-                    Save Rs. {((gift.originalPrice - gift.price) * 200).toLocaleString()}
+                    Save ${gift.originalPrice - gift.price}
                   </span>
                 </div>
 
@@ -681,13 +681,13 @@ export default function FeaturedGifts() {
 
                   <div className="flex items-baseline gap-3 mb-6">
                     <span className="text-3xl font-bold text-[#c8622a]">
-                      Rs. {(selectedGift.price * 200).toLocaleString()}
+                      ${selectedGift.price} USD
                     </span>
                     <span className="text-lg text-gray-300 line-through font-light">
-                      Rs. {(selectedGift.originalPrice * 200).toLocaleString()}
+                      ${selectedGift.originalPrice}
                     </span>
                     <span className="ml-2 text-xs font-bold text-green-600 bg-green-50 px-2 py-0.5 rounded">
-                      Save Rs. {((selectedGift.originalPrice - selectedGift.price) * 200).toLocaleString()}
+                      Save ${selectedGift.originalPrice - selectedGift.price}
                     </span>
                   </div>
                 </div>
@@ -769,8 +769,7 @@ export default function FeaturedGifts() {
                     </div>
                     <Button className="flex-1 h-12 bg-[#c8622a] hover:bg-[#b5531e] text-white rounded-xl font-bold shadow-lg shadow-orange-200 transition-all hover:-translate-y-px">
                       <ShoppingCart className="h-4 w-4 mr-2" />
-                      Add to Cart — Rs. 
-                      {(selectedGift.price * quantity * 200).toLocaleString()}
+                      Add to Cart — ${(selectedGift.price * quantity).toFixed(2)}
                     </Button>
                   </div>
 
