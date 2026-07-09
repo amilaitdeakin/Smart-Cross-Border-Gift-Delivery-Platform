@@ -116,8 +116,8 @@ const CheckoutPage = () => {
 
   const subtotal = getTotalPrice();
   const cartItemCount = getTotalItems();
-  const delivery = subtotal > 50 ? 0 : 12;
-  const serviceFee = 5;
+  const delivery = subtotal > 10000 ? 0 : 2400;
+  const serviceFee = 1000;
   const total = subtotal + delivery + serviceFee;
 
   // AI Message Suggestions
@@ -170,7 +170,7 @@ const CheckoutPage = () => {
         items: products.map((p) => ({
           giftId: p.id.toString(),
           quantity: p.quantity || 1,
-          priceAud: p.price || 0,
+          priceAud: (p.price || 0) / 200,
         })),
         userId: session?.user.id || "",
       });
@@ -707,11 +707,7 @@ const CheckoutPage = () => {
                       Qty: {product.quantity || 1}
                     </p>
                     <p className="text-orange-700 font-bold">
-                      $
-                      {((product.price || 0) * (product.quantity || 1)).toFixed(
-                        2,
-                      )}{" "}
-                      AUD
+                      Rs. {((product.price || 0) * (product.quantity || 1)).toLocaleString()}
                     </p>
                   </div>
                 </div>
@@ -725,25 +721,25 @@ const CheckoutPage = () => {
               <div className="flex justify-between">
                 <span>Subtotal</span>
                 <span className="font-bold text-black">
-                  ${subtotal.toFixed(2)}
+                  Rs. {subtotal.toLocaleString()}
                 </span>
               </div>
               <div className="flex justify-between">
                 <span>Delivery</span>
                 <span className="font-bold text-black">
-                  {delivery === 0 ? "Free" : `$${delivery}`}
+                  {delivery === 0 ? "Free" : `Rs. ${delivery.toLocaleString()}`}
                 </span>
               </div>
               <div className="flex justify-between">
                 <span>Service Fee</span>
-                <span className="font-bold text-black">${serviceFee}</span>
+                <span className="font-bold text-black">Rs. {serviceFee.toLocaleString()}</span>
               </div>
             </div>
 
             <div className="flex justify-between items-center mb-6">
               <span className="text-xl font-bold">Total</span>
               <span className="text-3xl font-bold text-[#D36B31]">
-                ${total.toFixed(2)} AUD
+                Rs. {total.toLocaleString()}
               </span>
             </div>
 

@@ -1,26 +1,23 @@
 // app/admin/layout.tsx
 "use client";
 
-import React, { useState } from "react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import {
-  LayoutDashboard,
-  Package,
-  Clock,
-  Truck,
   CheckCircle2,
-  XCircle,
-  Users,
-  Settings,
+  Clock,
+  Gift,
+  LayoutDashboard,
   LogOut,
   Menu,
+  Package,
+  Truck,
+  Users,
   X,
-  Gift,
-  BarChart3,
-  ShoppingBag,
+  XCircle,
 } from "lucide-react";
+import Link from "next/link";
+import { usePathname, useSearchParams } from "next/navigation";
+import React, { useState } from "react";
 
 const navItems = [
   {
@@ -80,12 +77,30 @@ export default function AdminLayout({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
+  const searchParams = useSearchParams();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const isActive = (href: string) => {
-    if (href.includes("?")) {
-      return pathname + "?" + href.split("?")[1] === href;
+    // For "/admin" exact match
+    if (href === "/admin") {
+      return pathname === "/admin";
     }
+
+    // For "/admin/orders" base path (All Orders)
+    if (href === "/admin/orders") {
+      return pathname === "/admin/orders" && !searchParams.get("status");
+    }
+
+    // For status-filtered routes
+    if (href.includes("?")) {
+      const [basePath, queryString] = href.split("?");
+      const params = new URLSearchParams(queryString);
+      const status = params.get("status");
+
+      // Check if current path matches and status param matches
+      return pathname === basePath && searchParams.get("status") === status;
+    }
+
     return pathname === href;
   };
 

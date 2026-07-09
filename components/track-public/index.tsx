@@ -293,7 +293,7 @@ const OrderTrackingPage = () => {
                     <p className="text-xs text-gray-400">Qty: {item.quantity}</p>
                   </div>
                   <div className="text-right">
-                    <p className="font-bold text-sm text-[#D36B31]">${parseFloat(item.priceAud || "0").toFixed(2)} AUD</p>
+                    <p className="font-bold text-sm text-[#D36B31]">Rs. {parseFloat(item.priceLkr || "0").toLocaleString()}</p>
                   </div>
                 </div>
               ))}
@@ -301,17 +301,17 @@ const OrderTrackingPage = () => {
               <div className="space-y-2 text-sm text-gray-600">
                 <div className="flex justify-between">
                   <span>Subtotal</span>
-                  <span className="font-semibold text-black">${parseFloat(order.subtotalAud || "0").toFixed(2)} AUD</span>
+                  <span className="font-semibold text-black">Rs. {parseFloat(order.subtotalLkr || "0").toLocaleString()}</span>
                 </div>
                 <div className="flex justify-between">
                   <span>Delivery Fee</span>
                   <span className="font-semibold text-black">
-                    {parseFloat(order.deliveryFeeAud || "0") === 0 ? "Free" : `$${parseFloat(order.deliveryFeeAud || "0").toFixed(2)} AUD`}
+                    {parseFloat(order.deliveryFeeLkr || "0") === 0 ? "Free" : `Rs. ${parseFloat(order.deliveryFeeLkr || "0").toLocaleString()}`}
                   </span>
                 </div>
                 <div className="flex justify-between text-base font-bold text-[#3D2C1F] pt-2">
                   <span>Total Amount</span>
-                  <span className="text-[#D36B31]">${parseFloat(order.totalAud || "0").toFixed(2)} AUD</span>
+                  <span className="text-[#D36B31]">Rs. {parseFloat(order.totalLkr || "0").toLocaleString()}</span>
                 </div>
               </div>
             </div>

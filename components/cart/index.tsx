@@ -41,7 +41,7 @@ export default function CartPage() {
 
   const cartItemCount = getTotalItems();
   const subtotal = getTotalPrice();
-  const shipping = subtotal > 50 ? 0 : 8.99;
+  const shipping = subtotal > 10000 ? 0 : 1798;
   const tax = subtotal * 0.1; // 10% tax
   const discountAmount = promoApplied ? subtotal * 0.1 : discount; // 10% discount with promo
   const total = subtotal + shipping + tax - discountAmount;
@@ -168,7 +168,7 @@ export default function CartPage() {
                           Price:
                         </span>
                         <span className="font-semibold text-[#d96c28]">
-                          ${product.price}
+                          Rs. {product.price.toLocaleString()}
                         </span>
                       </div>
 
@@ -206,10 +206,9 @@ export default function CartPage() {
                           Total:
                         </span>
                         <span className="text-lg font-bold text-[#d96c28]">
-                          $
-                          {(
+                          Rs. {(
                             (product.price || 0) * (product.quantity || 1)
-                          ).toFixed(2)}
+                          ).toLocaleString()}
                         </span>
                       </div>
                     </div>
@@ -284,28 +283,28 @@ export default function CartPage() {
                 <div className="space-y-3">
                   <div className="flex justify-between text-[#6f5a4d]">
                     <span>Subtotal</span>
-                    <span>${subtotal.toFixed(2)}</span>
+                    <span>Rs. {subtotal.toLocaleString()}</span>
                   </div>
                   <div className="flex justify-between text-[#6f5a4d]">
                     <span>Shipping</span>
                     <span>
-                      {shipping === 0 ? "Free" : `$${shipping.toFixed(2)}`}
+                      {shipping === 0 ? "Free" : `Rs. ${shipping.toLocaleString()}`}
                     </span>
                   </div>
                   <div className="flex justify-between text-[#6f5a4d]">
                     <span>Estimated Tax (10%)</span>
-                    <span>${tax.toFixed(2)}</span>
+                    <span>Rs. {tax.toLocaleString()}</span>
                   </div>
                   {promoApplied && discountAmount > 0 && (
                     <div className="flex justify-between text-green-600">
                       <span>Discount (10%)</span>
-                      <span>-${discountAmount.toFixed(2)}</span>
+                      <span>-Rs. {discountAmount.toLocaleString()}</span>
                     </div>
                   )}
                   <Separator className="my-2" />
                   <div className="flex justify-between text-xl font-bold">
                     <span>Total</span>
-                    <span className="text-[#d96c28]">${total.toFixed(2)}</span>
+                    <span className="text-[#d96c28]">Rs. {total.toLocaleString()}</span>
                   </div>
                 </div>
 
@@ -322,7 +321,7 @@ export default function CartPage() {
                 <div className="mt-6 space-y-3 rounded-xl bg-[#fde8d7] p-4">
                   <div className="flex items-center gap-2 text-sm text-[#5e4739]">
                     <Truck className="h-4 w-4 text-[#d96c28]" />
-                    <span>Free shipping on orders over $50</span>
+                    <span>Free shipping on orders over Rs. 10,000</span>
                   </div>
                   <div className="flex items-center gap-2 text-sm text-[#5e4739]">
                     <Shield className="h-4 w-4 text-[#d96c28]" />
@@ -367,7 +366,7 @@ export default function CartPage() {
                       <div className="flex-1">
                         <p className="text-sm font-medium">{product.title}</p>
                         <p className="text-sm font-bold text-[#d96c28]">
-                          ${product.price}
+                          Rs. {product.price.toLocaleString()}
                         </p>
                       </div>
                       <Link href="/explore">
@@ -393,19 +392,19 @@ export default function CartPage() {
 const recommendedProducts = [
   {
     title: "Red Roses Bouquet",
-    price: 39,
+    price: 7800,
     image:
       "https://images.unsplash.com/photo-1520763185298-1b434c919102?q=80&w=200&auto=format&fit=crop",
   },
   {
     title: "Luxury Chocolate Box",
-    price: 52,
+    price: 10400,
     image:
       "https://images.unsplash.com/photo-1511381939415-e44015466834?q=80&w=200&auto=format&fit=crop",
   },
   {
     title: "Birthday Cake",
-    price: 45,
+    price: 9000,
     image:
       "https://images.unsplash.com/photo-1586788224331-947f68671cf1?q=80&w=200&auto=format&fit=crop",
   },
