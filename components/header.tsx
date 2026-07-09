@@ -52,48 +52,51 @@ type SearchSuggestion = {
 
 const SEARCH_SUGGESTIONS: SearchSuggestion[] = categories.reduce<
   SearchSuggestion[]
->((suggestions, category) => {
-  category.items.forEach((item) => {
-    suggestions.push({
-      label: item.name,
-      href: item.href,
-      group: category.title,
-      description: `${category.title} · ${item.name}`,
-      keywords: [category.title, item.name],
+>(
+  (suggestions, category) => {
+    category.items.forEach((item) => {
+      suggestions.push({
+        label: item.name,
+        href: item.href,
+        group: category.title,
+        description: `${category.title} · ${item.name}`,
+        keywords: [category.title, item.name],
+      });
     });
-  });
 
-  return suggestions;
-}, [
-  {
-    label: "Chocolate Cake",
-    href: "/gifts?q=Chocolate%20Cake",
-    group: "Trending",
-    description: "Rich cakes and sweet treats",
-    keywords: ["chocolate", "cake", "sweet", "dessert"],
+    return suggestions;
   },
-  {
-    label: "Belgian Chocolates",
-    href: "/gifts?q=Belgian%20Chocolates",
-    group: "Trending",
-    description: "Premium chocolate gift ideas",
-    keywords: ["chocolate", "gift", "sweet"],
-  },
-  {
-    label: "Birthday Gifts",
-    href: "/gifts?q=Birthday%20Gifts",
-    group: "Occasions",
-    description: "Popular gifts for birthdays",
-    keywords: ["birthday", "gift", "celebration"],
-  },
-  {
-    label: "Anniversary Gifts",
-    href: "/gifts?q=Anniversary%20Gifts",
-    group: "Occasions",
-    description: "Romantic gift ideas",
-    keywords: ["anniversary", "gift", "romantic"],
-  },
-]);
+  [
+    {
+      label: "Chocolate Cake",
+      href: "/gifts?q=Chocolate%20Cake",
+      group: "Trending",
+      description: "Rich cakes and sweet treats",
+      keywords: ["chocolate", "cake", "sweet", "dessert"],
+    },
+    {
+      label: "Belgian Chocolates",
+      href: "/gifts?q=Belgian%20Chocolates",
+      group: "Trending",
+      description: "Premium chocolate gift ideas",
+      keywords: ["chocolate", "gift", "sweet"],
+    },
+    {
+      label: "Birthday Gifts",
+      href: "/gifts?q=Birthday%20Gifts",
+      group: "Occasions",
+      description: "Popular gifts for birthdays",
+      keywords: ["birthday", "gift", "celebration"],
+    },
+    {
+      label: "Anniversary Gifts",
+      href: "/gifts?q=Anniversary%20Gifts",
+      group: "Occasions",
+      description: "Romantic gift ideas",
+      keywords: ["anniversary", "gift", "romantic"],
+    },
+  ],
+);
 
 const normalizeSearch = (value: string) => value.trim().toLowerCase();
 
@@ -158,9 +161,7 @@ const Header = () => {
     setMobileOpen(false);
   };
 
-  const handleSearchKeyDown = (
-    event: KeyboardEvent<HTMLInputElement>
-  ) => {
+  const handleSearchKeyDown = (event: KeyboardEvent<HTMLInputElement>) => {
     if (event.key === "Enter") {
       event.preventDefault();
       handleSearch(searchQuery);
@@ -454,7 +455,7 @@ const Header = () => {
 
       <header className="lta-header sticky top-0 z-50">
         {/* Top utility bar */}
-        <div className="lta-topbar">
+        {/*         <div className="lta-topbar">
           <div className="container mx-auto px-4 py-2 flex items-center justify-between">
             <span>
               🇦🇺 Fast delivery across Worldwide · 🇱🇰 Sourced from Sri Lanka
@@ -476,7 +477,7 @@ const Header = () => {
               </a>
             </div>
           </div>
-        </div>
+        </div> */}
 
         {/* Main header bar */}
         <div className="lta-main-bar">

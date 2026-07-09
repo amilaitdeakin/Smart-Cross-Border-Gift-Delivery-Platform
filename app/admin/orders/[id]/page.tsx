@@ -458,7 +458,7 @@ export default function OrderDetailPage() {
                         </p>
                       </div>
                       <p className="font-semibold text-[#d96c28]">
-                        ${Number(item.priceAud).toFixed(2)}
+                        Rs. {Number(item.priceLkr).toLocaleString()}
                       </p>
                     </div>
                   ))
@@ -642,25 +642,25 @@ export default function OrderDetailPage() {
                 <div className="flex justify-between text-sm">
                   <span className="text-[#6f5a4d]">Subtotal</span>
                   <span className="font-medium text-[#2d1b12]">
-                    ${Number(order.subtotalAud).toFixed(2)}
+                    Rs. {Number(order.subtotalLkr).toLocaleString()}
                   </span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-[#6f5a4d]">Delivery Fee</span>
                   <span className="font-medium text-[#2d1b12]">
-                    ${Number(order.deliveryFeeAud).toFixed(2)}
+                    Rs. {Number(order.deliveryFeeLkr).toLocaleString()}
                   </span>
                 </div>
                 <div className="flex justify-between text-sm">
                   <span className="text-[#6f5a4d]">Tax</span>
                   <span className="font-medium text-[#2d1b12]">
-                    ${Number(order.taxAud).toFixed(2)}
+                    Rs. {Number(order.taxLkr).toLocaleString()}
                   </span>
                 </div>
                 <div className="border-t border-[#eadfd4] pt-3 flex justify-between">
                   <span className="font-semibold text-[#2d1b12]">Total</span>
                   <span className="text-xl font-bold text-[#d96c28]">
-                    ${Number(order.totalAud).toFixed(2)}
+                    Rs. {Number(order.totalLkr).toLocaleString()}
                   </span>
                 </div>
               </div>

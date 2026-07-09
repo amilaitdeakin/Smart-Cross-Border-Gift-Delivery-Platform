@@ -44,7 +44,7 @@ export default function AdminDashboard() {
     }
 
     const orders = ordersData.orders;
-    const totalRevenue = orders.reduce((sum, o) => sum + Number(o.totalAud), 0);
+    const totalRevenue = orders.reduce((sum, o) => sum + Number(o.totalLkr), 0);
 
     return {
       total: orders.length,
@@ -150,7 +150,7 @@ export default function AdminDashboard() {
                 <div>
                   <p className="text-[#6f5a4d] text-sm font-medium">Revenue</p>
                   <p className="text-3xl font-bold text-green-600 mt-2">
-                    ${stats.totalRevenue.toFixed(0)}
+                    Rs. {stats.totalRevenue.toLocaleString()}
                   </p>
                   <div className="flex items-center gap-1 mt-1 text-xs text-green-600">
                     <ArrowUp className="w-3 h-3" />
@@ -170,7 +170,7 @@ export default function AdminDashboard() {
                     Avg Order Value
                   </p>
                   <p className="text-3xl font-bold text-purple-600 mt-2">
-                    ${stats.averageOrderValue.toFixed(2)}
+                    Rs. {stats.averageOrderValue.toLocaleString()}
                   </p>
                   <div className="flex items-center gap-1 mt-1 text-xs text-purple-600">
                     <ArrowUp className="w-3 h-3" />
@@ -353,7 +353,7 @@ export default function AdminDashboard() {
                           {new Date(order.createdAt).toLocaleDateString()}
                         </td>
                         <td className="px-4 py-3 text-sm font-semibold text-[#d96c28]">
-                          ${Number(order.totalAud).toFixed(2)}
+                          Rs. {Number(order.totalLkr).toLocaleString()}
                         </td>
                         <td className="px-4 py-3">
                           <span

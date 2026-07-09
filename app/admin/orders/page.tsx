@@ -36,6 +36,13 @@ export default function AdminOrdersPage() {
   const [limit] = React.useState(50);
   const [offset, setOffset] = React.useState(0);
 
+  // Sync state with URL search params (e.g. when clicking sidebar tabs)
+  React.useEffect(() => {
+    setStatus((searchParams.get("status") as any) || undefined);
+    setSearch(searchParams.get("search") || "");
+    setOffset(0);
+  }, [searchParams]);
+
   const {
     data: ordersData,
     isLoading,
@@ -400,7 +407,7 @@ export default function AdminOrdersPage() {
                     </td>
                     <td className="px-6 py-4">
                       <div className="text-sm font-semibold text-[#d96c28]">
-                        ${Number(order.totalAud).toFixed(2)}
+                        Rs. {Number(order.totalLkr).toLocaleString()}
                       </div>
                       <div className="text-xs text-[#9c8779]">
                         {order.items?.length || 0} items
