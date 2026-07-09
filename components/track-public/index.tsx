@@ -5,19 +5,30 @@ import { useQuery } from "@tanstack/react-query";
 
 import { useSearchParams } from "next/navigation";
 import { useTRPC } from "@/trpc/client";
-import { AlertCircle, Check, Gift, Globe, Loader2, Plane, Truck } from "lucide-react";
+import {
+  AlertCircle,
+  Check,
+  Gift,
+  Globe,
+  Loader2,
+  Plane,
+  Truck,
+} from "lucide-react";
 import Image from "next/image";
 
 const OrderTrackingPage = () => {
   const [searchInput, setSearchInput] = useState("");
   const [searchCode, setSearchCode] = useState("");
-  
+
   const trpc = useTRPC();
-  const { data: order, isLoading, error } = useQuery({
+  const {
+    data: order,
+    isLoading,
+    error,
+  } = useQuery({
     ...trpc.order.trackOrder.queryOptions({ code: searchCode }),
     enabled: !!searchCode,
   });
-
 
   const searchParams = useSearchParams();
 
@@ -40,17 +51,35 @@ const OrderTrackingPage = () => {
   const getStatusBadge = (status: string) => {
     switch (status) {
       case "pending":
-        return { text: "Pending", bg: "bg-blue-50 text-blue-600 border-blue-200" };
+        return {
+          text: "Pending",
+          bg: "bg-blue-50 text-blue-600 border-blue-200",
+        };
       case "processing":
-        return { text: "Processing", bg: "bg-amber-50 text-amber-600 border-amber-200" };
+        return {
+          text: "Processing",
+          bg: "bg-amber-50 text-amber-600 border-amber-200",
+        };
       case "out_for_delivery":
-        return { text: "Out for Delivery", bg: "bg-purple-50 text-purple-600 border-purple-200" };
+        return {
+          text: "Out for Delivery",
+          bg: "bg-purple-50 text-purple-600 border-purple-200",
+        };
       case "delivered":
-        return { text: "Delivered", bg: "bg-green-50 text-green-600 border-green-200" };
+        return {
+          text: "Delivered",
+          bg: "bg-green-50 text-green-600 border-green-200",
+        };
       case "cancelled":
-        return { text: "Cancelled", bg: "bg-red-50 text-red-600 border-red-200" };
+        return {
+          text: "Cancelled",
+          bg: "bg-red-50 text-red-600 border-red-200",
+        };
       case "refunded":
-        return { text: "Refunded", bg: "bg-gray-50 text-gray-600 border-gray-200" };
+        return {
+          text: "Refunded",
+          bg: "bg-gray-50 text-gray-600 border-gray-200",
+        };
       default:
         return { text: status, bg: "bg-gray-50 text-gray-600 border-gray-200" };
     }
@@ -94,8 +123,13 @@ const OrderTrackingPage = () => {
         <span className="text-[10px] font-bold text-[#D36B31] uppercase tracking-[0.2em] block mb-4">
           Order Tracking
         </span>
-        <h2 className="text-2xl font-bold mb-6">Enter Your Tracking or Order Number</h2>
-        <form onSubmit={handleSearch} className="flex flex-col md:flex-row gap-3">
+        <h2 className="text-2xl font-bold mb-6">
+          Enter Your Tracking or Order Number
+        </h2>
+        <form
+          onSubmit={handleSearch}
+          className="flex flex-col md:flex-row gap-3"
+        >
           <input
             type="text"
             value={searchInput}
@@ -103,12 +137,16 @@ const OrderTrackingPage = () => {
             placeholder="Example: GIFT-869606"
             className="flex-1 bg-[#FFFBF5] border border-gray-200 rounded-xl px-4 py-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#D36B31]/20"
           />
-          <button type="submit" className="bg-[#D36B31] text-white px-8 py-3 rounded-xl font-bold hover:bg-[#b85a28] transition shadow-md shadow-orange-200 flex items-center justify-center gap-2">
+          <button
+            type="submit"
+            className="bg-[#D36B31] text-white px-8 py-3 rounded-xl font-bold hover:bg-[#b85a28] transition shadow-md shadow-orange-200 flex items-center justify-center gap-2"
+          >
             Track Order
           </button>
         </form>
         <p className="text-[10px] text-gray-400 mt-4 italic">
-          You can find your order number in your order confirmation screen or confirmation email.
+          You can find your order number in your order confirmation screen or
+          confirmation email.
         </p>
       </section>
 
@@ -125,7 +163,8 @@ const OrderTrackingPage = () => {
           <AlertCircle className="h-12 w-12 text-red-500 mb-4" />
           <h3 className="text-xl font-bold mb-2">Order Not Found</h3>
           <p className="text-gray-500 text-sm max-w-md">
-            We couldn't find an order with reference number <span className="font-semibold text-black">"{searchCode}"</span>. 
+            We couldn't find an order with reference number{" "}
+            <span className="font-semibold text-black">"{searchCode}"</span>.
             Please check the spelling and try again.
           </p>
         </div>
@@ -136,7 +175,8 @@ const OrderTrackingPage = () => {
           <span className="text-4xl mb-4 text-gray-300">📦</span>
           <h3 className="text-lg font-bold mb-1">Awaiting Search Input</h3>
           <p className="text-gray-400 text-xs max-w-sm">
-            Enter your order reference above to retrieve real-time delivery estimates and transit logs.
+            Enter your order reference above to retrieve real-time delivery
+            estimates and transit logs.
           </p>
         </div>
       )}
@@ -148,16 +188,26 @@ const OrderTrackingPage = () => {
             {/* Order Info Header */}
             <div className="flex flex-col md:flex-row justify-between items-start gap-4 mb-12">
               <div>
-                <span className={`inline-block border text-[10px] font-bold px-3 py-1 rounded-lg uppercase mb-3 ${getStatusBadge(order.status).bg}`}>
+                <span
+                  className={`inline-block border text-[10px] font-bold px-3 py-1 rounded-lg uppercase mb-3 ${getStatusBadge(order.status).bg}`}
+                >
                   {getStatusBadge(order.status).text}
                 </span>
                 <h3 className="text-2xl font-bold">
                   Order{" "}
-                  <span className="text-gray-400 font-medium">#{order.orderNumber}</span>
+                  <span className="text-gray-400 font-medium">
+                    #{order.orderNumber}
+                  </span>
                 </h3>
                 <p className="text-xs text-gray-500 mt-1">
-                  {order.items?.map((item: any) => `${item.quantity}x ${item.gift?.name || 'Gift'}`).join(", ")}
-                  {order.deliveryAddress?.city && ` • ${order.deliveryAddress.city}, Worldwide`}
+                  {order.items
+                    ?.map(
+                      (item: any) =>
+                        `${item.quantity}x ${item.gift?.name || "Gift"}`,
+                    )
+                    .join(", ")}
+                  {order.deliveryAddress?.city &&
+                    ` • ${order.deliveryAddress.city}, Worldwide`}
                 </p>
               </div>
               <div className="bg-[#FFFBF5] border border-gray-100 p-4 rounded-2xl text-center min-w-[140px] w-full md:w-auto">
@@ -191,17 +241,31 @@ const OrderTrackingPage = () => {
 
               {/* Step 2: Gift Prepared */}
               {(() => {
-                const isCompleted = ["processing", "out_for_delivery", "delivered", "in_transit"].includes(order.status);
+                const isCompleted = [
+                  "processing",
+                  "out_for_delivery",
+                  "delivered",
+                  "in_transit",
+                ].includes(order.status);
                 return (
                   <div className="relative pl-14 pb-12">
-                    <div className={`absolute left-0 top-0 w-10 h-10 rounded-full flex items-center justify-center z-10 ${
-                      isCompleted ? "bg-[#D36B31] text-white" : "bg-white border-2 border-gray-200 text-gray-400"
-                    }`}>
+                    <div
+                      className={`absolute left-0 top-0 w-10 h-10 rounded-full flex items-center justify-center z-10 ${
+                        isCompleted
+                          ? "bg-[#D36B31] text-white"
+                          : "bg-white border-2 border-gray-200 text-gray-400"
+                      }`}
+                    >
                       <Gift size={20} />
                     </div>
-                    <h4 className={`font-bold text-lg ${isCompleted ? "text-gray-900" : "text-gray-400"}`}>Gift Prepared</h4>
+                    <h4
+                      className={`font-bold text-lg ${isCompleted ? "text-gray-900" : "text-gray-400"}`}
+                    >
+                      Gift Prepared
+                    </h4>
                     <p className="text-xs text-gray-500 mt-1">
-                      Your gift has been beautifully wrapped and prepared for dispatch.
+                      Your gift has been beautifully wrapped and prepared for
+                      dispatch.
                     </p>
                     {isCompleted && (
                       <p className="text-[10px] text-gray-400 mt-1">
@@ -214,18 +278,33 @@ const OrderTrackingPage = () => {
 
               {/* Step 3: In Transit */}
               {(() => {
-                const isCompleted = ["out_for_delivery", "delivered"].includes(order.status) || 
-                  (order.delivery && ["in_transit", "out_for_delivery", "delivered"].includes(order.delivery.status as string));
-                const isActive = (order.status as string) === "in_transit" || 
+                const isCompleted =
+                  ["out_for_delivery", "delivered"].includes(order.status) ||
+                  (order.delivery &&
+                    ["in_transit", "out_for_delivery", "delivered"].includes(
+                      order.delivery.status as string,
+                    ));
+                const isActive =
+                  (order.status as string) === "in_transit" ||
                   (order.delivery && order.delivery.status === "in_transit");
                 return (
                   <div className="relative pl-14 pb-12">
-                    <div className={`absolute left-0 top-0 w-10 h-10 rounded-full flex items-center justify-center z-10 ${
-                      isCompleted ? "bg-[#D36B31] text-white" : isActive ? "bg-white border-2 border-[#D36B31] text-[#D36B31]" : "bg-white border-2 border-gray-200 text-gray-400"
-                    }`}>
+                    <div
+                      className={`absolute left-0 top-0 w-10 h-10 rounded-full flex items-center justify-center z-10 ${
+                        isCompleted
+                          ? "bg-[#D36B31] text-white"
+                          : isActive
+                            ? "bg-white border-2 border-[#D36B31] text-[#D36B31]"
+                            : "bg-white border-2 border-gray-200 text-gray-400"
+                      }`}
+                    >
                       <Plane size={20} />
                     </div>
-                    <h4 className={`font-bold text-lg ${isCompleted || isActive ? "text-gray-900" : "text-gray-400"}`}>In Transit</h4>
+                    <h4
+                      className={`font-bold text-lg ${isCompleted || isActive ? "text-gray-900" : "text-gray-400"}`}
+                    >
+                      In Transit
+                    </h4>
                     <p className="text-xs text-gray-500 mt-1">
                       Your order is currently on the way to Worldwide.
                     </p>
@@ -245,23 +324,32 @@ const OrderTrackingPage = () => {
                 const isActiveOrDelivered = isDelivered || isOutForDelivery;
                 return (
                   <div className="relative pl-14">
-                    <div className={`absolute left-0 top-0 w-10 h-10 rounded-full flex items-center justify-center z-10 ${
-                      isDelivered ? "bg-[#D36B31] text-white" : isOutForDelivery ? "bg-white border-2 border-[#D36B31] text-[#D36B31]" : "bg-white border-2 border-gray-200 text-gray-400"
-                    }`}>
+                    <div
+                      className={`absolute left-0 top-0 w-10 h-10 rounded-full flex items-center justify-center z-10 ${
+                        isDelivered
+                          ? "bg-[#D36B31] text-white"
+                          : isOutForDelivery
+                            ? "bg-white border-2 border-[#D36B31] text-[#D36B31]"
+                            : "bg-white border-2 border-gray-200 text-gray-400"
+                      }`}
+                    >
                       <Truck size={20} />
                     </div>
-                    <h4 className={`font-bold text-lg ${isActiveOrDelivered ? "text-[#D36B31]" : "text-gray-400"}`}>
+                    <h4
+                      className={`font-bold text-lg ${isActiveOrDelivered ? "text-[#D36B31]" : "text-gray-400"}`}
+                    >
                       {isDelivered ? "Delivered" : "Out for Delivery"}
                     </h4>
                     <p className="text-xs text-gray-500 mt-1">
-                      {isDelivered 
-                        ? "Your gift has been successfully delivered and signed for. Thank you for choosing WorldWish!" 
-                        : "Your gift is with our local delivery partner for doorstep handoff."
-                      }
+                      {isDelivered
+                        ? "Your gift has been successfully delivered and signed for. Thank you for choosing WorldWish!"
+                        : "Your gift is with our local delivery partner for doorstep handoff."}
                     </p>
                     {isActiveOrDelivered && (
                       <p className="text-[10px] text-[#D36B31] font-bold mt-2 uppercase">
-                        {isDelivered ? `Delivered: ${formatDate(order.updatedAt, true)}` : `Expected: Today • ${order.deliveryTimeSlot || "9:00 AM - 6:00 PM"}`}
+                        {isDelivered
+                          ? `Delivered: ${formatDate(order.updatedAt, true)}`
+                          : `Expected: Today • ${order.deliveryTimeSlot || "9:00 AM - 6:00 PM"}`}
                       </p>
                     )}
                   </div>
@@ -272,7 +360,9 @@ const OrderTrackingPage = () => {
 
           {/* Detailed Items Card */}
           <section className="max-w-2xl mx-auto bg-white rounded-[2.5rem] p-8 md:p-10 border border-gray-100 shadow-sm mb-12">
-            <h4 className="font-serif font-bold text-xl mb-6">Gift Order Summary</h4>
+            <h4 className="font-serif font-bold text-xl mb-6">
+              Gift Order Summary
+            </h4>
             <div className="space-y-4">
               {order.items?.map((item: any) => (
                 <div key={item.id} className="flex gap-4 items-center">
@@ -285,15 +375,23 @@ const OrderTrackingPage = () => {
                         className="object-cover"
                       />
                     ) : (
-                      <div className="w-full h-full flex items-center justify-center text-2xl bg-[#FFFBF5]">🎁</div>
+                      <div className="w-full h-full flex items-center justify-center text-2xl bg-[#FFFBF5]">
+                        🎁
+                      </div>
                     )}
                   </div>
                   <div className="flex-1">
-                    <h5 className="font-bold text-sm text-[#3D2C1F]">{item.gift?.name || "Premium Gift Item"}</h5>
-                    <p className="text-xs text-gray-400">Qty: {item.quantity}</p>
+                    <h5 className="font-bold text-sm text-[#3D2C1F]">
+                      {item.gift?.name || "Premium Gift Item"}
+                    </h5>
+                    <p className="text-xs text-gray-400">
+                      Qty: {item.quantity}
+                    </p>
                   </div>
                   <div className="text-right">
-                    <p className="font-bold text-sm text-[#D36B31]">Rs. {parseFloat(item.priceLkr || "0").toLocaleString()}</p>
+                    <p className="font-bold text-sm text-[#D36B31]">
+                      $ {parseFloat(item.priceLkr || "0").toLocaleString()}
+                    </p>
                   </div>
                 </div>
               ))}
@@ -301,17 +399,23 @@ const OrderTrackingPage = () => {
               <div className="space-y-2 text-sm text-gray-600">
                 <div className="flex justify-between">
                   <span>Subtotal</span>
-                  <span className="font-semibold text-black">Rs. {parseFloat(order.subtotalLkr || "0").toLocaleString()}</span>
+                  <span className="font-semibold text-black">
+                    $ {parseFloat(order.subtotalLkr || "0").toLocaleString()}
+                  </span>
                 </div>
                 <div className="flex justify-between">
                   <span>Delivery Fee</span>
                   <span className="font-semibold text-black">
-                    {parseFloat(order.deliveryFeeLkr || "0") === 0 ? "Free" : `Rs. ${parseFloat(order.deliveryFeeLkr || "0").toLocaleString()}`}
+                    {parseFloat(order.deliveryFeeLkr || "0") === 0
+                      ? "Free"
+                      : `$ ${parseFloat(order.deliveryFeeLkr || "0").toLocaleString()}`}
                   </span>
                 </div>
                 <div className="flex justify-between text-base font-bold text-[#3D2C1F] pt-2">
                   <span>Total Amount</span>
-                  <span className="text-[#D36B31]">Rs. {parseFloat(order.totalLkr || "0").toLocaleString()}</span>
+                  <span className="text-[#D36B31]">
+                    $ {parseFloat(order.totalLkr || "0").toLocaleString()}
+                  </span>
                 </div>
               </div>
             </div>
@@ -382,4 +486,3 @@ const OrderTrackingPage = () => {
 };
 
 export default OrderTrackingPage;
-

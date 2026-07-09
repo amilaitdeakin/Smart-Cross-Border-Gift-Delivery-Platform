@@ -892,16 +892,14 @@ const Header = () => {
             aria-label="Mobile navigation menu"
           >
             <div className="flex items-center justify-between mb-5">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-lg bg-linear-to-br from-amber-500 to-orange-700 flex items-center justify-center">
-                  <Gift className="h-4 w-4 text-white" />
-                </div>
-                <span
-                  className="lta-logo-font font-semibold"
-                  style={{ color: "#1a0a00" }}
-                >
-                  WorldWish
-                </span>
+              <div>
+                <Image
+                  src="/assets/imasge.png"
+                  alt="Logo"
+                  width={200}
+                  height={200}
+                  className="lta-logo-font"
+                />
               </div>
               <button
                 className="lta-icon-btn"

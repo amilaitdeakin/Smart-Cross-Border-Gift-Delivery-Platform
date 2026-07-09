@@ -90,7 +90,7 @@ export default function Hero() {
                   <ChevronRight className="ml-2 h-5 w-5" />
                 </Link>
               </Button>
-              <Button
+              {/*         <Button
                 size="lg"
                 variant="outline"
                 className="border-2 border-[#c8622a] text-[#c8622a] hover:bg-orange-50 px-8 h-14 text-base rounded-full"
@@ -100,7 +100,7 @@ export default function Hero() {
                   <Play className="mr-2 h-5 w-5 fill-current" />
                   How It Works
                 </Link>
-              </Button>
+              </Button> */}
             </div>
 
             {/* Trust Badges */}
@@ -142,7 +142,7 @@ export default function Hero() {
                   <Badge className="bg-orange-100 text-[#c8622a] border-none">
                     Surprise Ready
                   </Badge>
-                  <span className="text-[#c8622a] font-bold">Rs. 17,800</span>
+                  <span className="text-[#c8622a] font-bold">$89 USD</span>
                 </div>
                 <div className="mt-4 flex items-center gap-2 text-sm text-gray-500">
                   <MapPin className="h-4 w-4" /> Delivery to Sydney • Today
@@ -165,7 +165,9 @@ export default function Hero() {
                   </div>
                 </div>
                 <div className="flex justify-between items-center">
-                  <span className="text-[#c8622a] font-semibold">Rs. 13,000</span>
+                  <span className="text-[#c8622a] font-semibold">
+                    $65 USD
+                  </span>
                   <Badge
                     variant="outline"
                     className="border-[#c8622a] text-[#c8622a]"

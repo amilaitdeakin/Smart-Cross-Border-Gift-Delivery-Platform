@@ -407,7 +407,7 @@ export default function AdminOrdersPage() {
                     </td>
                     <td className="px-6 py-4">
                       <div className="text-sm font-semibold text-[#d96c28]">
-                        Rs. {Number(order.totalLkr).toLocaleString()}
+                        $ {Number(order.totalLkr).toLocaleString()}
                       </div>
                       <div className="text-xs text-[#9c8779]">
                         {order.items?.length || 0} items

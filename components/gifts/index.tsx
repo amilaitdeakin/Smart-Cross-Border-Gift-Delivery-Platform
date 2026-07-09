@@ -182,7 +182,7 @@ export default function ExploreAllGiftsPage({
                     <div className="flex-1">
                       <h4 className="font-semibold">{item.title}</h4>
                       <p className="text-lg font-bold text-[#d96c28]">
-                        Rs. {item.price.toLocaleString()}
+                        ${item.price.toFixed(2)}
                       </p>
 
                       {/* Quantity Controls */}
@@ -212,7 +212,7 @@ export default function ExploreAllGiftsPage({
                     {/* Item Total & Remove */}
                     <div className="text-right">
                       <p className="font-semibold">
-                        Rs. {((item.price || 0) * (item.quantity || 1)).toLocaleString()}
+                        ${((item.price || 0) * (item.quantity || 1)).toFixed(2)}
                       </p>
                       <button
                         onClick={() => removeProduct(index)}
@@ -234,7 +234,7 @@ export default function ExploreAllGiftsPage({
               <div className="space-y-2">
                 <div className="flex justify-between text-sm text-[#6f5a4d]">
                   <span>Subtotal</span>
-                  <span>Rs. {cartTotal.toLocaleString()}</span>
+                  <span>${cartTotal.toFixed(2)}</span>
                 </div>
                 <div className="flex justify-between text-sm text-[#6f5a4d]">
                   <span>Shipping</span>
@@ -244,7 +244,7 @@ export default function ExploreAllGiftsPage({
                 <div className="flex justify-between text-lg font-bold">
                   <span>Total</span>
                   <span className="text-[#d96c28]">
-                    Rs. {cartTotal.toLocaleString()}
+                    ${cartTotal.toFixed(2)}
                   </span>
                 </div>
               </div>
@@ -433,11 +433,11 @@ export default function ExploreAllGiftsPage({
                     <div className="mt-5 flex items-center justify-between">
                       <div>
                         <p className="text-2xl font-bold text-[#d96c28]">
-                          Rs. {product.price.toLocaleString()}
+                          ${product.price}
                         </p>
                         {product.oldPrice && (
                           <p className="text-sm text-[#9c8779] line-through">
-                            Rs. {product.oldPrice.toLocaleString()}
+                            ${product.oldPrice}
                           </p>
                         )}
                       </div>
@@ -547,8 +547,8 @@ const productsData = [
       "https://plus.unsplash.com/premium_photo-1703631158408-6f6d3f984de3?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjV8fHJlZCUyMHJvc2VzJTIwYm91cXVldHxlbnwwfHwwfHx8MA%3D%3D",
     description:
       "A luxury handcrafted bouquet with premium roses and elegant wrapping.",
-    price: 7800,
-    oldPrice: 10400,
+    price: 39,
+    oldPrice: 52,
     rating: 5,
     isNew: false,
   },
@@ -561,8 +561,8 @@ const productsData = [
       "https://images.unsplash.com/photo-1511381939415-e44015466834?q=80&w=1200&auto=format&fit=crop",
     description:
       "Elegant assorted chocolates perfect for gifting and celebrations.",
-    price: 10400,
-    oldPrice: 14000,
+    price: 52,
+    oldPrice: 70,
     rating: 5,
     isNew: false,
   },
@@ -574,8 +574,8 @@ const productsData = [
     image:
       "https://images.unsplash.com/photo-1548741487-18d363dc4469?q=80&w=1740&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     description: "Crafted premium chocolate selection with elegant flavors.",
-    price: 9000,
-    oldPrice: 12000,
+    price: 45,
+    oldPrice: 60,
     rating: 4,
     isNew: true,
   },
@@ -587,8 +587,8 @@ const productsData = [
     image:
       "https://images.unsplash.com/photo-1606313564200-e75d5e30476c?q=80&w=1200&auto=format&fit=crop",
     description: "Premium chocolate gift hamper with assorted delights.",
-    price: 13600,
-    oldPrice: 18400,
+    price: 68,
+    oldPrice: 92,
     rating: 5,
     isNew: false,
   },
@@ -601,8 +601,8 @@ const productsData = [
       "https://images.unsplash.com/photo-1635117492718-695a17a5977a?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8Mnx8cmVkJTIwdmVsdmV0JTIwYmlydGhkYXklMjBjYWtlfGVufDB8fDB8fHww",
     description:
       "Moist red velvet cake with cream cheese frosting, perfect for birthdays.",
-    price: 9000,
-    oldPrice: 11600,
+    price: 45,
+    oldPrice: 58,
     rating: 5,
     isNew: false,
   },
@@ -614,8 +614,8 @@ const productsData = [
     image:
       "https://images.unsplash.com/photo-1601884928885-92a922f7962f?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8c3VuJTIwZmxvd2VyJTIwZGVsaWdodCUyMGJvdWd1ZXR8ZW58MHx8MHx8fDA%3D",
     description: "Bright sunflowers arranged with seasonal greens.",
-    price: 7000,
-    oldPrice: 9600,
+    price: 35,
+    oldPrice: 48,
     rating: 4,
     isNew: false,
   },
@@ -627,8 +627,8 @@ const productsData = [
     image:
       "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?q=80&w=1200&auto=format&fit=crop",
     description: "14k gold plated necklace with custom name engraving.",
-    price: 17800,
-    oldPrice: 24000,
+    price: 89,
+    oldPrice: 120,
     rating: 5,
     isNew: true,
   },
@@ -641,8 +641,8 @@ const productsData = [
       "https://plus.unsplash.com/premium_photo-1673809129184-a65d23772437?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8ODh8fFJvbWFudGljJTIwRGlubmVyJTIwQ29tYm98ZW58MHx8MHx8fDA%3D",
     description:
       "Wine, chocolates, and roses for the perfect romantic evening.",
-    price: 15800,
-    oldPrice: 21000,
+    price: 79,
+    oldPrice: 105,
     rating: 5,
     isNew: false,
   },
@@ -654,8 +654,8 @@ const productsData = [
     image:
       "https://images.unsplash.com/photo-1616690248297-1ec539dd910f?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8N3x8SW5kb29yJTIwUGxhbnQlMjAtJTIwUGVhY2UlMjBMaWx5fGVufDB8fDB8fHww",
     description: "Low-maintenance peace lily that purifies air and brings joy.",
-    price: 6400,
-    oldPrice: 9000,
+    price: 32,
+    oldPrice: 45,
     rating: 4,
     isNew: false,
   },
@@ -667,8 +667,8 @@ const productsData = [
     image:
       "https://images.unsplash.com/photo-1623284060556-37e5ff559dd3?q=80&w=1740&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     description: "Fresh strawberries dipped in premium Belgian chocolate.",
-    price: 7600,
-    oldPrice: 10400,
+    price: 38,
+    oldPrice: 52,
     rating: 5,
     isNew: false,
   },
@@ -680,8 +680,8 @@ const productsData = [
     image:
       "https://images.unsplash.com/photo-1535141192574-5d4897c12636?q=80&w=1200&auto=format&fit=crop",
     description: "Elegant two-tier vanilla cake with buttercream flowers.",
-    price: 17000,
-    oldPrice: 22000,
+    price: 85,
+    oldPrice: 110,
     rating: 5,
     isNew: false,
   },
@@ -693,8 +693,8 @@ const productsData = [
     image:
       "https://images.unsplash.com/photo-1604603815783-2bd94c5a819f?q=80&w=1200&auto=format&fit=crop",
     description: "Relaxing spa essentials: candles, bath salts, and lotions.",
-    price: 11000,
-    oldPrice: 15000,
+    price: 55,
+    oldPrice: 75,
     rating: 4,
     isNew: true,
   },
@@ -706,8 +706,8 @@ const productsData = [
     image:
       "https://images.unsplash.com/photo-1679678109868-cb5bd66d61dc?q=80&w=870&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     description: "Stunning mix of red roses and white lilies.",
-    price: 9600,
-    oldPrice: 13000,
+    price: 48,
+    oldPrice: 65,
     rating: 5,
     isNew: false,
   },
@@ -719,8 +719,8 @@ const productsData = [
     image:
       "https://images.unsplash.com/photo-1591032729735-e487b4dafb55?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MjA0fHxFbmdyYXZlZCUyMFBob3RvJTIwRnJhbWV8ZW58MHx8MHx8fDA%3D",
     description: "Wooden frame with custom engraving and photo slot.",
-    price: 5800,
-    oldPrice: 8400,
+    price: 29,
+    oldPrice: 42,
     rating: 4,
     isNew: false,
   },
@@ -732,8 +732,8 @@ const productsData = [
     image:
       "https://plus.unsplash.com/premium_photo-1661675916179-4f79e308d389?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTMxfHxLaWRzJTIwQmlydGhkYXklMjBDb21ib3xlbnwwfHwwfHx8MA%3D%3D",
     description: "Cake, balloons, and small gift for children's birthdays.",
-    price: 9800,
-    oldPrice: 13600,
+    price: 49,
+    oldPrice: 68,
     rating: 5,
     isNew: true,
   },
@@ -745,8 +745,8 @@ const productsData = [
     image:
       "https://plus.unsplash.com/premium_photo-1681276170076-d3860cc735f9?q=80&w=774&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
     description: "Sterling silver bracelet with infinity symbol.",
-    price: 8400,
-    oldPrice: 12000,
+    price: 42,
+    oldPrice: 60,
     rating: 4,
     isNew: false,
   },
@@ -758,8 +758,8 @@ const productsData = [
     image:
       "https://images.unsplash.com/photo-1695885629004-90389b97ad40?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTQxfHxCb25zYWklMjBUcmVlJTIwLSUyMFplbiUyMEdhcmRlbnxlbnwwfHwwfHx8MA%3D%3D",
     description: "Beautiful bonsai tree for meditation and decor.",
-    price: 13000,
-    oldPrice: 17000,
+    price: 65,
+    oldPrice: 85,
     rating: 5,
     isNew: false,
   },
@@ -771,8 +771,8 @@ const productsData = [
     image:
       "https://images.unsplash.com/photo-1709195902163-7eee13e78970?w=600&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8M3x8Q2hvY29sYXRlJTIwVHJ1ZmZsZSUyMENha2V8ZW58MHx8MHx8fDA%3D",
     description: "Decadent chocolate truffle cake with ganache topping.",
-    price: 8400,
-    oldPrice: 11200,
+    price: 42,
+    oldPrice: 56,
     rating: 5,
     isNew: false,
   },

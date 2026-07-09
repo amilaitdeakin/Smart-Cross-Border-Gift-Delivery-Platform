@@ -150,7 +150,7 @@ export default function AdminDashboard() {
                 <div>
                   <p className="text-[#6f5a4d] text-sm font-medium">Revenue</p>
                   <p className="text-3xl font-bold text-green-600 mt-2">
-                    Rs. {stats.totalRevenue.toLocaleString()}
+                    $ {stats.totalRevenue.toLocaleString()}
                   </p>
                   <div className="flex items-center gap-1 mt-1 text-xs text-green-600">
                     <ArrowUp className="w-3 h-3" />
@@ -170,7 +170,7 @@ export default function AdminDashboard() {
                     Avg Order Value
                   </p>
                   <p className="text-3xl font-bold text-purple-600 mt-2">
-                    Rs. {stats.averageOrderValue.toLocaleString()}
+                    $ {stats.averageOrderValue.toLocaleString()}
                   </p>
                   <div className="flex items-center gap-1 mt-1 text-xs text-purple-600">
                     <ArrowUp className="w-3 h-3" />
@@ -353,7 +353,7 @@ export default function AdminDashboard() {
                           {new Date(order.createdAt).toLocaleDateString()}
                         </td>
                         <td className="px-4 py-3 text-sm font-semibold text-[#d96c28]">
-                          Rs. {Number(order.totalLkr).toLocaleString()}
+                          $ {Number(order.totalLkr).toLocaleString()}
                         </td>
                         <td className="px-4 py-3">
                           <span

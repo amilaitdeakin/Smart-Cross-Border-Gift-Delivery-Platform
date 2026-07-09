@@ -102,12 +102,12 @@ export default function Categories() {
   ];
 
   const trendingItems = [
-    { name: "Red Roses Bouquet", price: "Rs. 13,000", image: "🌹", sold: "2.5k+" },
-    { name: "Chocolate Cake", price: "Rs. 9,800", image: "🍰", sold: "1.8k+" },
-    { name: "Belgian Chocolates", price: "Rs. 7,800", image: "🍫", sold: "3.2k+" },
-    { name: "Gift Hamper", price: "Rs. 17,800", image: "🧺", sold: "1.2k+" },
-    { name: "Birthday Combo", price: "Rs. 15,800", image: "🎁", sold: "2.1k+" },
-    { name: "Flower Box", price: "Rs. 11,000", image: "🌸", sold: "1.5k+" },
+    { name: "Red Roses Bouquet", price: "$65", image: "🌹", sold: "2.5k+" },
+    { name: "Chocolate Cake", price: "$49", image: "🍰", sold: "1.8k+" },
+    { name: "Belgian Chocolates", price: "$39", image: "🍫", sold: "3.2k+" },
+    { name: "Gift Hamper", price: "$89", image: "🧺", sold: "1.2k+" },
+    { name: "Birthday Combo", price: "$79", image: "🎁", sold: "2.1k+" },
+    { name: "Flower Box", price: "$55", image: "🌸", sold: "1.5k+" },
   ];
 
   return (
